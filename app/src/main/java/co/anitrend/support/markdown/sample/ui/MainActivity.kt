@@ -1,10 +1,11 @@
-package io.wax911.support.markdown
+package co.anitrend.support.markdown.sample.ui
 
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import co.anitrend.support.markdown.sample.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 

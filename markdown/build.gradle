@@ -1,20 +1,17 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("kotlin-kapt")
 }
 
 android {
     compileSdkVersion compileSdk
     defaultConfig {
-        applicationId "co.anitrend.support.markdown.sample"
         minSdkVersion minSdk
         targetSdkVersion targetSdk
         versionCode versionCode
         versionName versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -28,38 +25,24 @@ android {
     }
 }
 
-androidExtensions {
-    experimental = true
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     /** Kotlin Libraries */
-    implementation  "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid"
 
-    /** Material Design */
-    implementation "com.google.android.material:material:$material"
-
-    implementation "androidx.constraintlayout:constraintlayout:$constraint"
-
-    /** Architecture Components */
-    implementation "androidx.core:core-ktx:$ktx"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtx"
-    implementation "androidx.lifecycle:lifecycle-extensions:$androidx"
+    /** Glide Libraries */
+    implementation "com.github.bumptech.glide:glide:$glide"
 
     /** Timber */
     implementation "com.jakewharton.timber:timber:$timber"
 
     /** Markown Library */
     implementation "ru.noties.markwon:core:$markown"
-    implementation "ru.noties.markwon:ext-strikethrough:$markown"
-    implementation "ru.noties.markwon:ext-tables:$markown"
-    implementation "ru.noties.markwon:ext-tasklist:$markown"
 
-
+    /** Testing-only dependencies */
     testImplementation "junit:junit:$junit"
     testImplementation "io.mockk:mockk:$mockk"
     androidTestImplementation "androidx.test:runner:$runner"
