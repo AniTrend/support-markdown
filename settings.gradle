@@ -1,1 +1,4 @@
-include ':app'
+include ':markdown'
+
+if (System.getenv("CI") == null)
+    include ':app'
