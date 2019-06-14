@@ -1,15 +1,18 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+}
 
 android {
-    compileSdkVersion rootProject.compileSdk
+    compileSdkVersion compileSdk
     defaultConfig {
-        applicationId "io.wax911.support.markdown"
-        minSdkVersion rootProject.minSdk
-        targetSdkVersion rootProject.targetSdk
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
+        applicationId "co.anitrend.support.markdown.sample"
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+        versionCode versionCode
+        versionName versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -25,23 +28,40 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.google.android.material:material:$rootProject.material"
-
     /** Kotlin Libraries */
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesCore"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesAndroid"
+    implementation  "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid"
+
+    /** Material Design */
+    implementation "com.google.android.material:material:$material"
+
+    implementation "androidx.constraintlayout:constraintlayout:$constraint"
 
     /** Architecture Components */
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.anroidx"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.core:core-ktx:$ktx"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtx"
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidx"
 
-    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint"
+    /** Timber */
+    implementation "com.jakewharton.timber:timber:$timber"
 
-    testImplementation "junit:junit:$rootProject.junit"
-    androidTestImplementation "androidx.test:runner:$rootProject.runner"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso"
+    /** Markown Library */
+    implementation "ru.noties.markwon:core:$markown"
+    implementation "ru.noties.markwon:ext-strikethrough:$markown"
+    implementation "ru.noties.markwon:ext-tables:$markown"
+    implementation "ru.noties.markwon:ext-tasklist:$markown"
+
+
+    testImplementation "junit:junit:$junit"
+    testImplementation "io.mockk:mockk:$mockk"
+    androidTestImplementation "androidx.test:runner:$runner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
 }
