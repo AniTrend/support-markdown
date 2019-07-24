@@ -1,6 +1,6 @@
 package co.anitrend.support.markdown.core
 
-import ru.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.AbstractMarkwonPlugin
 
 /**
  *

@@ -40,7 +40,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber"
 
     /** Markown Library */
-    implementation "ru.noties.markwon:core:$markown"
+    implementation "io.noties.markwon:core:$markwon"
 
     /** Testing-only dependencies */
     testImplementation "junit:junit:$junit"
