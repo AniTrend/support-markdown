@@ -20,8 +20,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -40,7 +50,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber"
 
     /** Markown Library */
-    implementation "ru.noties.markwon:core:$markown"
+    implementation "io.noties.markwon:core:$markwon"
 
     /** Testing-only dependencies */
     testImplementation "junit:junit:$junit"
