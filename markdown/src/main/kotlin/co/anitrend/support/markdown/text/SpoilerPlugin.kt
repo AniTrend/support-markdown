@@ -1,8 +1,14 @@
 package co.anitrend.support.markdown.text
 
+import androidx.annotation.ColorInt
 import androidx.annotation.VisibleForTesting
-import co.anitrend.support.markdown.core.IMarkdownPlugin
+import co.anitrend.support.markdown.core.contract.IMarkdownPlugin
+import co.anitrend.support.markdown.text.node.SpoilerNode
+import co.anitrend.support.markdown.text.render.SpoilerRender
 import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.MarkwonVisitor
+import org.commonmark.node.Text
 import java.lang.reflect.Modifier
 
 /**
@@ -20,28 +26,33 @@ import java.lang.reflect.Modifier
  *
  * @since 0.1.0
  */
-class SpoilerPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+class SpoilerPlugin private constructor(
+    @ColorInt private val backgroundColor: Int
+): IMarkdownPlugin, AbstractMarkwonPlugin() {
 
     /**
      * Regular expression that should be used for the implementing classing
      */
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
     override val regex = Regex(
         pattern = PATTERN_SPOILER,
         option = RegexOption.IGNORE_CASE
     )
 
-    override fun processMarkdown(markdown: String): String {
-        val pattern = regex.toPattern()
-        return markdown.replace(regex, "")
+    override fun configureVisitor(builder: MarkwonVisitor.Builder) {
+        builder.on(Text::class.java, SpoilerNode(regex))
+    }
+
+    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+        super.configureSpansFactory(builder)
+        builder.appendFactory(Text::class.java, SpoilerRender(backgroundColor))
     }
 
     companion object {
 
         @VisibleForTesting(otherwise = Modifier.PRIVATE)
-        const val PATTERN_SPOILER = "~!(.*?)!~"
+        const val PATTERN_SPOILER = "~!([\\s\\S]*?)!~"
 
-        fun create() =
-            SpoilerPlugin()
+        fun create(@ColorInt backgroundColor: Int) =
+            SpoilerPlugin(backgroundColor)
     }
 }

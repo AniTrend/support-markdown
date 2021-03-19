@@ -1,7 +1,7 @@
 package co.anitrend.support.markdown.style
 
 import androidx.annotation.VisibleForTesting
-import co.anitrend.support.markdown.core.IMarkdownPlugin
+import co.anitrend.support.markdown.core.contract.IMarkdownPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 import java.lang.reflect.Modifier
 
@@ -15,21 +15,36 @@ class CenterPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin
     /**
      * Regular expression that should be used for the implementing classing
      */
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
     override val regex = Regex(
         pattern = PATTERN_CENTER,
         option = RegexOption.IGNORE_CASE
     )
 
     override fun processMarkdown(markdown: String): String {
-        val pattern = regex.toPattern()
-        return markdown.replace(regex, "<center></center>")
+        if (regex.containsMatchIn(markdown)) {
+            val matches = regex.findAll(markdown, 0)
+            var replacement = markdown
+            matches.forEach {  matchResult ->
+                val fullMatch = matchResult.groupValues[GROUP_ORIGINAL_MATCH]
+                val contentMatch = matchResult.groupValues[GROUP_CONTENT]
+
+                replacement = replacement.replace(
+                    fullMatch,
+                    "<center>$contentMatch</center>"
+                )
+            }
+            return replacement
+        }
+        return super.processMarkdown(markdown)
     }
 
     companion object {
 
         @VisibleForTesting(otherwise = Modifier.PRIVATE)
-        const val PATTERN_CENTER = "~~~(.*?)~~~"
+        const val PATTERN_CENTER = "~~~([\\s\\S]*?)~~~"
+
+        private const val GROUP_ORIGINAL_MATCH = 0
+        private const val GROUP_CONTENT = 1
 
         fun create() =
             CenterPlugin()

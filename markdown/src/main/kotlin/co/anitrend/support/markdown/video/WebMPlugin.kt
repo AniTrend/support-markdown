@@ -1,7 +1,8 @@
 package co.anitrend.support.markdown.video
 
 import androidx.annotation.VisibleForTesting
-import co.anitrend.support.markdown.core.IMarkdownPlugin
+import co.anitrend.support.markdown.core.contract.IMarkdownPlugin
+import co.anitrend.support.markdown.core.contract.IMarkdownPlugin.Companion.NO_THUMBNAIL
 import io.noties.markwon.AbstractMarkwonPlugin
 import java.lang.reflect.Modifier
 
@@ -19,21 +20,36 @@ class WebMPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin()
     /**
      * Regular expression that should be used for the implementing classing
      */
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
     override val regex = Regex(
         pattern = PATTERN_WEB_M,
         option = RegexOption.IGNORE_CASE
     )
 
     override fun processMarkdown(markdown: String): String {
-        val pattern = regex.toPattern()
-        return markdown.replace(regex, "")
+        if (regex.containsMatchIn(markdown)) {
+            val matches = regex.findAll(markdown)
+            var replacement = markdown
+            matches.forEach { matchResult ->
+                val resourceUrl = matchResult.groupValues[GROUP_CONTENT]
+
+                replacement = replacement.replace(
+                    regex,
+                    """<img src="$NO_THUMBNAIL" target="$resourceUrl"/>"""
+                )
+            }
+            return replacement
+        }
+        return super.processMarkdown(markdown)
     }
 
     companion object {
 
         @VisibleForTesting(otherwise = Modifier.PRIVATE)
-        const val PATTERN_WEB_M = "(webm).*?(\\([^)]+\\))"
+        const val PATTERN_WEB_M = "webm(\\d*|\\d*px|\\d*%)(\\([^)]+\\))"
+
+        private const val GROUP_ORIGINAL_MATCH = 0
+        private const val GROUP_CONTENT_SIZE = 1
+        private const val GROUP_CONTENT = 2
 
         fun create() =
             WebMPlugin()
