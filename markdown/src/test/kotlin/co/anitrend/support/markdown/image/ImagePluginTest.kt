@@ -36,6 +36,6 @@ class ImagePluginTest : ICoreRegexTest {
         val matchResultSet = plugin.regex.findAll(testCase, 0)
 
         val actual = matchResultSet.count()
-        assertEquals(7, actual)
+        assertEquals(6, actual)
     }
 }
