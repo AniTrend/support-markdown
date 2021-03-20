@@ -3,7 +3,6 @@ package co.anitrend.support.markdown.core.extensions
 import android.content.Context
 import android.text.util.Linkify
 import android.util.DisplayMetrics
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import io.noties.markwon.Markwon

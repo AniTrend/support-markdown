@@ -5,8 +5,6 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import coil.size.OriginalSize
 import coil.size.PixelSize
-import coil.size.Precision
-import coil.size.Scale
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.coil.CoilImagesPlugin
 

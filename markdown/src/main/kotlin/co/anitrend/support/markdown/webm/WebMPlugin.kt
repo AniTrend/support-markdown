@@ -1,11 +1,8 @@
 package co.anitrend.support.markdown.webm
 
-import androidx.annotation.VisibleForTesting
 import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.common.IMarkdownPlugin.Companion.NO_THUMBNAIL
 import co.anitrend.support.markdown.common.IMarkdownPlugin.Companion.VIDEO_THUMBNAIL_URL
 import io.noties.markwon.AbstractMarkwonPlugin
-import java.lang.reflect.Modifier
 
 /**
  * Surround the URL with __webm(https://files.kiniro.uk/video/sonic.webm)__

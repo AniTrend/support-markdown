@@ -1,9 +1,7 @@
 package co.anitrend.support.markdown.ephasis
 
-import androidx.annotation.VisibleForTesting
 import co.anitrend.support.markdown.common.IMarkdownPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
-import java.lang.reflect.Modifier
 
 /**
  *  Put two * or _ characters either side of the text:

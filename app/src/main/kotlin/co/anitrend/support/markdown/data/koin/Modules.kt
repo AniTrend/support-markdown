@@ -1,12 +1,10 @@
 package co.anitrend.support.markdown.data.koin
 
-import co.anitrend.support.markdown.core.extensions.displayWidth
-import co.anitrend.support.markdown.data.usecase.TextFeedUseCase
 import co.anitrend.support.markdown.data.repository.GetFeedTextPagedRepository
+import co.anitrend.support.markdown.data.usecase.TextFeedUseCase
 import co.anitrend.support.markdown.domain.interactor.GetTextFeedPaged
 import com.apollographql.apollo.ApolloClient
 import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
