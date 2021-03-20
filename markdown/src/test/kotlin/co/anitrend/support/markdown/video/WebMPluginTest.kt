@@ -1,7 +1,8 @@
 package co.anitrend.support.markdown.video
 
 import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.core.IMarkdownPlugin
+import co.anitrend.support.markdown.common.IMarkdownPlugin
+import co.anitrend.support.markdown.webm.WebMPlugin
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -12,12 +13,29 @@ import org.junit.Test
  */
 class WebMPluginTest : ICoreRegexTest {
 
-    override val plugin: IMarkdownPlugin by lazy {
+    override val plugin by lazy {
         WebMPlugin.create()
     }
 
     @Test
     override fun `defined regex pattern detect elements`() {
-        assertTrue(true)
+        val testCase = """
+            __Blue Day Done Right &#128525; ♥️ &#128527;__
+
+            img270(https://cdn.discordapp.com/attachments/458389398782869524/541236388897751061/WhatsApp_Image_2019-02-02_at_11.45.24.jpeg) img250(https://cdn.discordapp.com/attachments/458389398782869524/541236389522571264/WhatsApp_Image_2019-02-02_at_11.45.28.jpeg) 
+
+            ~!img250(https://cdn.discordapp.com/attachments/458389398782869524/541236396401360906/WhatsApp_Image_2019-02-02_at_11.45.26.jpeg) img250(https://cdn.discordapp.com/attachments/458389398782869524/541236404471070730/WhatsApp_Image_2019-02-02_at_11.45.36_1.jpeg)!~
+
+            __We're not done yet..__
+
+            webm(https://cdn.discordapp.com/attachments/458389398782869524/541236487275151360/WhatsApp_Video_2019-02-02_at_11.45.32.mp4)
+        """.trimIndent()
+
+        assertTrue(plugin.regex.containsMatchIn(testCase))
+
+        val matchResultSet = plugin.regex.findAll(testCase, 0)
+
+        val actual = matchResultSet.count()
+        assertEquals(1, actual)
     }
 }
