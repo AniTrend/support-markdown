@@ -15,6 +15,7 @@ object Libraries {
 
     object Repositories {
         const val jitPack = "https://www.jitpack.io"
+        const val markdown = "https://dl.bintray.com/jetbrains/markdown"
         const val dependencyUpdates = "https://dl.bintray.com/pdvrieze/maven"
     }
 
@@ -157,6 +158,11 @@ object Libraries {
         object Dokka {
             private const val version = "1.4.30"
             const val gradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:$version"
+        }
+
+        object Markdown {
+            private const val version = "0.2.0.pre-55"
+            const val markdown = "org.jetbrains:markdown:$version"
         }
 
         object Kotlin {
