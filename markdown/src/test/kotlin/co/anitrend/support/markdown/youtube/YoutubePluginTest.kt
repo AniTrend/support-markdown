@@ -1,8 +1,6 @@
-package co.anitrend.support.markdown.video
+package co.anitrend.support.markdown.youtube
 
 import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.youtube.YouTubePlugin
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -70,7 +68,7 @@ class YoutubePluginTest : ICoreRegexTest {
             ####<align center><b>from FINAL FANTASY XV</b></align>
             ###<align center><b>by [Florence + The Machine](https://www.youtube.com/channel/UC5MujsH-hrVWHBBfSSmv18A)</b></align>
 
-            <align center><img src="https://img.youtube.com/vi/vv2DSmy3Tro/hqdefault.jpg" target="https://www.youtube.com/watch?v=vv2DSmy3Tro&ab_channel=FlorenceMachineVEVO"/></align>
+            <align center><a href="https://www.youtube.com/watch?v=vv2DSmy3Tro&ab_channel=FlorenceMachineVEVO"><img src="https://img.youtube.com/vi/vv2DSmy3Tro/hqdefault.jpg" width="100%"/></a></align>
 
             <align center>「[Spotify Link](https://open.spotify.com/track/5XSU59wtE5CRCAEyHmmGy4?si=JtsEJuASSv-Y2j_M1PYb9A)」</align>
 
@@ -85,7 +83,7 @@ class YoutubePluginTest : ICoreRegexTest {
             I get goose bumps every time when i replay FFXV and see this scene at the beginning of the game. 
             God, it's so amazing.
 
-            <img src="https://img.youtube.com/vi/hgJkqyuwWBw/hqdefault.jpg" target="https://www.youtube.com/watch?v=hgJkqyuwWBw&ab_channel=Apalagi08"/>
+            <a href="https://www.youtube.com/watch?v=hgJkqyuwWBw&ab_channel=Apalagi08"><img src="https://img.youtube.com/vi/hgJkqyuwWBw/hqdefault.jpg" width="100%"/></a>
             </align>
 
             <align center>
