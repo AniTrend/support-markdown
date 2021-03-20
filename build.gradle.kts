@@ -29,6 +29,9 @@ allprojects {
         maven {
             url = java.net.URI(co.anitrend.support.markdown.buildSrc.Libraries.Repositories.dependencyUpdates)
         }
+        maven {
+            url = java.net.URI(co.anitrend.support.markdown.buildSrc.Libraries.Repositories.markdown)
+        }
     }
 }
 

@@ -16,6 +16,8 @@ dependencies {
     implementation(Libraries.Markwon.Extension.strikeThrough)
     implementation(Libraries.Markwon.Extension.tables)
 
+    implementation(Libraries.JetBrains.Markdown.markdown)
+
     testImplementation(Libraries.AndroidX.Test.coreKtx)
     testImplementation(Libraries.AndroidX.Test.Extension.junit)
     testImplementation(Libraries.AndroidX.Test.Extension.junitKtx)
