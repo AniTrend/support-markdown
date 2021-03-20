@@ -1,15 +1,33 @@
-# [ :biohazard: WIP :biohazard: ] Support Markdown Library
+# [ :biohazard: WIP :biohazard: ] Support Markdown Library &nbsp; [![Build Status](https://www.travis-ci.com/AniTrend/support-markdown.svg?branch=main)](https://www.travis-ci.com/AniTrend/support-markdown) &nbsp; [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2bcc9217df74403a9d4afd8664b20c34)](https://www.codacy.com/gh/AniTrend/support-markdown/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AniTrend/support-markdown&amp;utm_campaign=Badge_Grade) &nbsp; [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown?ref=badge_shield) &nbsp; [![](https://jitpack.io/v/AniTrend/support-markdown.svg)](https://jitpack.io/#AniTrend/support-markdown)
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e3df67f16b74b7080972765ceba61e4)](https://www.codacy.com/app/AniTrend/support-markdown?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AniTrend/support-markdown&amp;utm_campaign=Badge_Grade) &nbsp; [![Build Status](https://travis-ci.org/AniTrend/support-markdown.svg?branch=master)](https://travis-ci.org/AniTrend/support-markdown)
 
 A markdown parse for android which uses the AniList [markdown spec](https://files.kiniro.uk/anilist-flavored-markdown-v1.md), and powered by [Markwon](https://noties.github.io/Markwon/)
 
-__Pull requests will not be allowed in the initial phase of development__
 
-## Progress
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown?ref=badge_large)
 
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/AniTrend/support-markdown.svg?columns=all)](https://waffle.io/AniTrend/support-markdown)
+____
 
+## Getting Started
+
+- __Add the JitPack repository to your build file__
+
+```javascript
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+```
+
+- __Add the dependency__
+
+```javascript
+dependencies {
+    implementation 'com.github.anitrend:support-markdown:{latest_version}'
+}
+```
 
 ## License
 

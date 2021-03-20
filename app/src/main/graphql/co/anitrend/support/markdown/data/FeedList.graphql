@@ -1,0 +1,49 @@
+query FeedList(
+    $page: Int!,
+    $perPage: Int!,
+    $userId: Int,
+    $type: ActivityType = TEXT,
+    $hasRepliesOrTypeText: Boolean = true,
+    $sort: [ActivitySort] = [ID_DESC],
+    $asHtml: Boolean = false
+) {
+    Page(page: $page, perPage: $perPage) {
+        pageInfo {
+            total
+            perPage
+            currentPage
+            hasNextPage
+        }
+        activities(
+            hasRepliesOrTypeText: $hasRepliesOrTypeText,
+            type: $type,
+            sort: $sort,
+            userId: $userId
+        ) {
+            ... on TextActivity {
+                id
+                text(asHtml: $asHtml)
+                createdAt
+                type
+                user {
+                    ... User
+                }
+                replyCount
+                likeCount
+                siteUrl
+            }
+        }
+    }
+}
+
+fragment User on User {
+    id
+    name
+    avatar {
+        ... on UserAvatar {
+            large
+            medium
+        }
+    }
+    isFollowing
+}
