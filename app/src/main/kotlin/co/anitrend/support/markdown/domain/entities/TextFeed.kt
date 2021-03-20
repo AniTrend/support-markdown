@@ -2,7 +2,7 @@ package co.anitrend.support.markdown.domain.entities
 
 data class TextFeed(
     val id: Int,
-    val text: String,
+    val text: String?,
     val createdAt: String,
     val user: User,
     val replyCount: Int,

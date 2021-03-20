@@ -62,11 +62,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textview.MaterialTextView
-            android:visibility="visible"
             android:id="@+id/feedText"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_marginTop="@dimen/margin_lg"
-            android:layout_marginStart="76dp"
+            android:layout_marginStart="@dimen/margin_xl"
             android:layout_marginEnd="@dimen/margin_xl"
             android:textIsSelectable="true"
             android:layout_width="match_parent"
@@ -75,7 +74,7 @@
     <View
         android:background="@color/blackTransparent"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/margin_lg"
+        android:layout_marginTop="@dimen/margin_xl"
         android:layout_height="@dimen/margin_xs" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

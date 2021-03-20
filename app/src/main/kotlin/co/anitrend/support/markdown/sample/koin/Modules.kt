@@ -1,28 +1,35 @@
 package co.anitrend.support.markdown.sample.koin
 
-import android.text.util.Linkify
+import android.os.Build.VERSION.SDK_INT
 import androidx.core.content.ContextCompat
-import co.anitrend.support.markdown.core.CoreDelimiterPlugin
+import co.anitrend.support.markdown.center.CenterPlugin
+import co.anitrend.support.markdown.core.CorePlugin
+import co.anitrend.support.markdown.core.plugin.CoilStorePlugin
 import co.anitrend.support.markdown.data.koin.dataModules
-import co.anitrend.support.markdown.html.AlignTagHandler
-import co.anitrend.support.markdown.html.CenterTagHandler
+import co.anitrend.support.markdown.ephasis.EmphasisPlugin
+import co.anitrend.support.markdown.heading.HeadingPlugin
 import co.anitrend.support.markdown.image.ImagePlugin
+import co.anitrend.support.markdown.link.LinkifyPlugin
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.component.MainActivity
 import co.anitrend.support.markdown.sample.feed.FeedFragment
 import co.anitrend.support.markdown.sample.feed.adapter.FeedAdapter
 import co.anitrend.support.markdown.sample.feed.viewmodel.FeedViewModel
 import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedViewModel
-import co.anitrend.support.markdown.util.UtilityPlugin
-import co.anitrend.support.markdown.video.WebMPlugin
-import co.anitrend.support.markdown.video.YouTubePlugin
+import co.anitrend.support.markdown.spoiler.SpoilerPlugin
+import co.anitrend.support.markdown.webm.WebMPlugin
+import co.anitrend.support.markdown.youtube.YouTubePlugin
 import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
+import coil.transform.RoundedCornersTransformation
 import coil.util.CoilUtils
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.linkify.LinkifyPlugin
+import io.noties.markwon.image.coil.CoilImagesPlugin
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.fragment.dsl.fragment
@@ -32,27 +39,38 @@ import org.koin.dsl.module
 private val coreModule = module {
     single {
         val context = androidContext()
+        val color = ContextCompat.getColor(
+                context,
+                R.color.colorAccent
+            )
+
+        val radius = context.resources.getDimensionPixelSize(
+            R.dimen.margin_md
+        ).toFloat()
+
         Markwon.builder(context)
-            .usePlugin(
-                CoreDelimiterPlugin.create(
-                ContextCompat.getColor(
-                    context,
-                    R.color.colorAccent
-                )
-            ))
-            .usePlugin(UtilityPlugin.create())
-            //.usePlugin(ImagePlugin.create())
-            //.usePlugin(WebMPlugin.create())
-            //.usePlugin(YouTubePlugin.create())
+            .usePlugin(HtmlPlugin.create())
+            .usePlugin(CorePlugin.create())
+            .usePlugin(LinkifyPlugin.create())
+            .usePlugin(HeadingPlugin.create())
+            .usePlugin(EmphasisPlugin.create())
+            .usePlugin(CenterPlugin.create())
+            .usePlugin(ImagePlugin.create())
+            .usePlugin(WebMPlugin.create())
+            .usePlugin(YouTubePlugin.create())
+            .usePlugin(SpoilerPlugin.create(color))
             .usePlugin(StrikethroughPlugin.create())
-            .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
             .usePlugin(TaskListPlugin.create(context))
             .usePlugin(
-                HtmlPlugin.create { plugin -> plugin
-                    .addHandler(AlignTagHandler())
-                    .addHandler(CenterTagHandler())
-                }
-            ).build()
+                CoilImagesPlugin.create(
+                    CoilStorePlugin.create(
+                        ImageRequest.Builder(context)
+                            .transformations(RoundedCornersTransformation(radius))
+                    ),
+                    get()
+                )
+            )
+            .build()
     }
 }
 
@@ -87,6 +105,12 @@ private val imageLoaderModule = module {
                         CoilUtils.createDefaultCache(context)
                     )
                     .build()
+            }
+            .componentRegistry {
+                if (SDK_INT >= 28)
+                    add(ImageDecoderDecoder())
+                else
+                    add(GifDecoder())
             }.build()
     }
 }

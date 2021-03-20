@@ -102,7 +102,8 @@ internal class FeedDataSource(
             page = position,
             perPage = query.pageSize,
             asHtml = Input.optional(query.asHtml),
-            hasRepliesOrTypeText = Input.optional(query.hasRepliesOrTypeText)
+            hasRepliesOrTypeText = Input.optional(query.hasRepliesOrTypeText),
+            userId = Input.optional(query.userId)
         )
 
         return try {

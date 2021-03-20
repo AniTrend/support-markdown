@@ -9,7 +9,9 @@ import co.anitrend.support.markdown.domain.model.TextFeedQuery
 import com.apollographql.apollo.ApolloClient
 import kotlinx.coroutines.flow.Flow
 
-internal class GetFeedTextPagedRepository(private val client: ApolloClient) {
+internal class GetFeedTextPagedRepository(
+    private val client: ApolloClient
+) {
     operator fun invoke(query: TextFeedQuery): Flow<PagingData<TextFeed>> {
         val pager = Pager(
             config = PagingConfig(

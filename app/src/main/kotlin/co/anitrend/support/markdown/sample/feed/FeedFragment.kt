@@ -1,20 +1,26 @@
 package co.anitrend.support.markdown.sample.feed
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.anitrend.support.markdown.core.AbstractFragment
+import co.anitrend.support.markdown.core.extensions.displayWidth
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.databinding.FragmentFeedListBinding
 import co.anitrend.support.markdown.sample.feed.adapter.FeedAdapter
 import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class FeedFragment(
@@ -22,6 +28,26 @@ internal class FeedFragment(
 ) : AbstractFragment<FragmentFeedListBinding>(R.layout.fragment_feed_list) {
 
     private val viewModel by viewModel<AbstractFeedViewModel>()
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        /**
+         * Callback for handling the [OnBackPressedDispatcher.onBackPressed] event.
+         */
+        override fun handleOnBackPressed() {
+            val default = TextFeedQuery(
+                hasRepliesOrTypeText = true,
+                asHtml = false
+            )
+            if (viewModel.query.value != default) {
+                viewModel.query.tryEmit(default)
+                lifecycleScope.launch {
+                    viewModel(default)
+                }
+            }
+            else
+                activity?.finish()
+        }
+    }
 
     private fun setUpRecyclerAdapter() {
         requireBinding().feedRecycler.layoutManager = LinearLayoutManager(
@@ -55,12 +81,50 @@ internal class FeedFragment(
         lifecycleScope.launchWhenResumed {
             adapter.loadStateFlow
                 .distinctUntilChangedBy { it.refresh }
-                .filter { it.refresh is LoadState.NotLoading }
                 .collect {
-                    requireBinding().feedSwipeRefresh.isRefreshing = false
-                    requireBinding().feedRecycler.scrollToPosition(0)
+                    when (val state = it.refresh) {
+                        is LoadState.NotLoading -> {
+                            requireBinding().feedSwipeRefresh.isRefreshing = false
+                            requireBinding().feedRecycler.scrollToPosition(0)
+                        }
+                        is LoadState.Loading -> {
+                            requireBinding().feedSwipeRefresh.isRefreshing = true
+                        }
+                        is LoadState.Error -> {
+                            Snackbar.make(
+                                requireBinding().root,
+                                state.error.message.orEmpty(),
+                                Snackbar.LENGTH_INDEFINITE
+                            ).apply {
+                                setAction("Retry") {
+                                    adapter.retry()
+                                    dismiss()
+                                }
+                            }
+                            requireBinding().feedSwipeRefresh.isRefreshing = false
+                        }
+                    }
                 }
         }
+        lifecycleScope.launchWhenResumed {
+            adapter.clickState.filterNotNull()
+                .onEach { feed ->
+                    val query = TextFeedQuery(
+                        hasRepliesOrTypeText = true,
+                        asHtml = false,
+                        userId = feed.user.id
+                    )
+                    viewModel.query.value = query
+                    viewModel(query)
+                }
+                .catch { cause ->
+                    Log.e(javaClass.simpleName, "Error collecting flow", cause)
+                }
+                .collect()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this, onBackPressedCallback
+        )
     }
 
     /**

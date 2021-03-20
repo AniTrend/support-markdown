@@ -15,5 +15,5 @@ internal abstract class AbstractFeedViewModel : ViewModel() {
 
     protected abstract val interactor: GetTextFeedPaged
 
-    protected abstract suspend operator fun invoke(textFeedQuery: TextFeedQuery)
+    abstract suspend operator fun invoke(textFeedQuery: TextFeedQuery)
 }

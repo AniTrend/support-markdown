@@ -1,5 +1,6 @@
 package co.anitrend.support.markdown.sample.feed.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -7,10 +8,7 @@ import co.anitrend.support.markdown.domain.entities.TextFeed
 import co.anitrend.support.markdown.domain.interactor.GetTextFeedPaged
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
 import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class FeedViewModel(
@@ -22,9 +20,13 @@ internal class FeedViewModel(
     init {
         viewModelScope.launch {
             query.filterNotNull()
-                .collect {
+                .onEach {
                     invoke(it)
                 }
+                .catch { cause: Throwable ->
+                    Log.e(javaClass.simpleName, "Error collecting flow", cause)
+                }
+                .collect()
         }
     }
 

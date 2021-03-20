@@ -37,16 +37,6 @@ class MainActivity : AbstractActivity<ActivityMainBinding>() {
         updateUI()
     }
 
-    /**
-     * Take care of popping the fragment back stack or finishing the activity
-     * as appropriate.
-     */
-    override fun onBackPressed() {
-        if (bottomDrawerBehavior.state != BottomSheetBehavior.STATE_COLLAPSED)
-            bottomDrawerBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        super.onBackPressed()
-    }
-
     private fun updateUI() {
         supportFragmentManager.commit {
             setCustomAnimations(

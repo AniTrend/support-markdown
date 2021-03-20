@@ -53,6 +53,10 @@ dependencies {
     implementation(Libraries.Markwon.Extension.taskList)
     implementation(Libraries.Markwon.Extension.strikeThrough)
 
+    implementation(Libraries.JetBrains.Markdown.markdown)
+
     implementation(Libraries.Coil.coil)
     implementation(Libraries.Coil.gif)
+
+    implementation(Libraries.betterLinkMovement)
 }

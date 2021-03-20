@@ -1,20 +1,26 @@
 package co.anitrend.support.markdown.sample.feed.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import co.anitrend.support.markdown.core.extensions.onDestroy
+import co.anitrend.support.markdown.core.extensions.setMarkdown
 import co.anitrend.support.markdown.domain.entities.TextFeed
 import co.anitrend.support.markdown.sample.databinding.AdapterFeedBinding
 import coil.load
 import coil.request.Disposable
 import coil.transform.CircleCropTransformation
 import io.noties.markwon.Markwon
+import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class FeedAdapter(
     private val markwon: Markwon
 ) : PagingDataAdapter<TextFeed, FeedAdapter.ViewHolder>(Companion) {
+
+    val clickState = MutableStateFlow<TextFeed?>(null)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -44,7 +50,8 @@ internal class FeedAdapter(
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(markwon, getItem(position))
+        val item = getItem(position)
+        holder.onBind(markwon, item, clickState)
     }
 
     /**
@@ -77,7 +84,7 @@ internal class FeedAdapter(
 
         private var disposable: Disposable? = null
 
-        fun onBind(markwon: Markwon, feed: TextFeed?) {
+        fun onBind(markwon: Markwon, feed: TextFeed?, clickState: MutableStateFlow<TextFeed?>) {
             disposable = binding.composerAvatar.load(
                 feed?.user?.avatar?.medium
             ) {
@@ -86,16 +93,22 @@ internal class FeedAdapter(
                 )
             }
 
+            binding.composerAvatar.setOnClickListener {
+                clickState.value = feed
+            }
+
             binding.composer.text = feed?.user?.name
             binding.feedTime.text = feed?.createdAt
             val markDownText = feed?.text ?: "**No content available**"
-            markwon.setMarkdown(
-                binding.feedText,
-                markDownText
-            )
+
+            Log.i(javaClass.simpleName, "${feed?.user?.id} | ${feed?.user?.name}")
+            Log.i(javaClass.simpleName, "${feed?.text}")
+            binding.feedText.setMarkdown(markwon, markDownText)
         }
 
         fun onRecycled() {
+            binding.composerAvatar.setOnClickListener(null)
+            binding.feedText.onDestroy()
             disposable?.dispose()
             disposable = null
         }
