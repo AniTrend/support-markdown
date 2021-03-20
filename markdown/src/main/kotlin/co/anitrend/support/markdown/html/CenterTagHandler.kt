@@ -2,14 +2,11 @@ package co.anitrend.support.markdown.html
 
 import android.text.Layout
 import android.text.style.AlignmentSpan
-import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonVisitor
-import io.noties.markwon.RenderProps
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.TagHandler
-import io.noties.markwon.html.tag.SimpleTagHandler
 
 class CenterTagHandler : TagHandler() {
 

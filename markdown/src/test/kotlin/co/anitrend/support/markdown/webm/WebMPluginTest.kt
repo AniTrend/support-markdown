@@ -1,8 +1,6 @@
-package co.anitrend.support.markdown.video
+package co.anitrend.support.markdown.webm
 
 import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.webm.WebMPlugin
 import org.junit.Assert.*
 import org.junit.Test
 

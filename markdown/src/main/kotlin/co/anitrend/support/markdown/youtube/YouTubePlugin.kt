@@ -40,7 +40,7 @@ class YouTubePlugin private constructor(): AbstractMarkwonPlugin(), IMarkdownPlu
 
             return String.format(THUMBNAIL, mediaId)
         }
-        return IMarkdownPlugin.NO_THUMBNAIL
+        return IMarkdownPlugin.VIDEO_THUMBNAIL_URL
     }
 
     /**

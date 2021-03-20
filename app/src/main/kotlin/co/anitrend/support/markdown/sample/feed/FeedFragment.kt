@@ -1,6 +1,5 @@
 package co.anitrend.support.markdown.sample.feed
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,17 +9,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.anitrend.support.markdown.core.AbstractFragment
-import co.anitrend.support.markdown.core.extensions.displayWidth
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.databinding.FragmentFeedListBinding
 import co.anitrend.support.markdown.sample.feed.adapter.FeedAdapter
 import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class FeedFragment(

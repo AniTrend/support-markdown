@@ -3,7 +3,6 @@ package co.anitrend.support.markdown.sample.component
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.fragment.app.commit
-import androidx.lifecycle.lifecycleScope
 import co.anitrend.support.markdown.core.AbstractActivity
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.databinding.ActivityMainBinding
