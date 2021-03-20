@@ -1,6 +1,7 @@
-package co.anitrend.support.markdown.image
+package co.anitrend.support.markdown.spoiler
 
 import co.anitrend.support.markdown.ICoreRegexTest
+import co.anitrend.support.markdown.common.IMarkdownPlugin
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -9,26 +10,20 @@ import org.junit.Test
  *
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
-class ImagePluginTest : ICoreRegexTest {
+class SpoilerPluginTest : ICoreRegexTest {
 
     override val plugin by lazy {
-        ImagePlugin.create()
+        SpoilerPlugin.create(0xFFF)
     }
 
     @Test
     override fun `defined regex pattern detect elements`() {
         val testCase = """
-            ~!
-            img180(https://www.anime-planet.com/images/characters/henrietta-168.jpg) 
-            img180(https://cdn.myanimelist.net/images/characters/7/30959.jpg)!~
+            ~!youtube(ZVJ3Ho83Ksg)!~
 
-            img(https://something.top.find)
+            Watch "**京都橘高校吹奏楽部**　大手筋商店街パレード　_Kyoto Tachibana SHS Band_" ~~on YouTube~~
 
-            img20%(https://something.top.find)
-
-            iMg20px(https://something.top.find) img20px(https://something.img.ref)
-
-            ImG20px(https://something.top.find)
+            ~!**Just enjoy &#x1f642;** !~
         """.trimIndent()
 
         assertTrue(plugin.regex.containsMatchIn(testCase))
@@ -36,6 +31,6 @@ class ImagePluginTest : ICoreRegexTest {
         val matchResultSet = plugin.regex.findAll(testCase, 0)
 
         val actual = matchResultSet.count()
-        assertEquals(7, actual)
+        assertEquals(2, actual)
     }
 }

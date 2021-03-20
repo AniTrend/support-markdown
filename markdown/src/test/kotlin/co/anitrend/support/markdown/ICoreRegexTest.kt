@@ -1,6 +1,6 @@
 package co.anitrend.support.markdown
 
-import co.anitrend.support.markdown.core.contract.IMarkdownPlugin
+import co.anitrend.support.markdown.common.IMarkdownPlugin
 
 interface ICoreRegexTest {
     val plugin: IMarkdownPlugin

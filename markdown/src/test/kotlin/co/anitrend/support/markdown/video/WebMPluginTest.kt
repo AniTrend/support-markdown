@@ -1,7 +1,8 @@
 package co.anitrend.support.markdown.video
 
 import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.core.contract.IMarkdownPlugin
+import co.anitrend.support.markdown.common.IMarkdownPlugin
+import co.anitrend.support.markdown.webm.WebMPlugin
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -12,7 +13,7 @@ import org.junit.Test
  */
 class WebMPluginTest : ICoreRegexTest {
 
-    override val plugin: IMarkdownPlugin by lazy {
+    override val plugin by lazy {
         WebMPlugin.create()
     }
 
