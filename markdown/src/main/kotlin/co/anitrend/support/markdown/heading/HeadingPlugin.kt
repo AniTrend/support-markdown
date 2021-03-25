@@ -33,7 +33,7 @@ class HeadingPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugi
         var replacement = markdown
         val matches = regex.findAll(markdown)
         matches.forEach { matchResult ->
-            val content = matchResult.groupValues.first()
+            val content = matchResult.groupValues.last()
 
             replacement = replacement.replace(
                 matchResult.value,

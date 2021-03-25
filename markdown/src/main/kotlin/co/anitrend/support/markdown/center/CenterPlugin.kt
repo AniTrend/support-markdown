@@ -24,8 +24,8 @@ class CenterPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin
         var replacement = markdown
         val matches = regex.findAll(markdown)
         matches.forEach { matchResult ->
-            val fullMatch = matchResult.groupValues[GROUP_ORIGINAL_MATCH]
-            val contentMatch = matchResult.groupValues[GROUP_CONTENT]
+            val fullMatch = matchResult.groupValues.first()
+            val contentMatch = matchResult.groupValues.last()
 
             replacement = replacement.replace(
                 fullMatch,
@@ -39,9 +39,6 @@ class CenterPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin
 
         @VisibleForTesting(otherwise = Modifier.PRIVATE)
         const val PATTERN_CENTER = "~~~([\\s\\S]*?)~~~"
-
-        private const val GROUP_ORIGINAL_MATCH = 0
-        private const val GROUP_CONTENT = 1
 
         fun create() =
             CenterPlugin()
