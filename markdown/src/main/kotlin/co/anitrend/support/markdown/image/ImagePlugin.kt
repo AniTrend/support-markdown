@@ -107,7 +107,7 @@ class ImagePlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin(
     }
 
     companion object {
-        private const val PATTERN_IMAGE = "(img(\\d*|\\d*px|\\d*%))\\((.+)\\)"
+        private const val PATTERN_IMAGE = "(img(\\d*|\\d*px|\\d*%))\\((.+?)\\)"
 
         private const val GROUP_IMAGE_SIZE = 2
         private const val GROUP_IMAGE_SRC = 3
