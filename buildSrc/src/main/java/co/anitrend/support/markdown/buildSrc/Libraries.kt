@@ -22,7 +22,7 @@ object Libraries {
     object Android {
 
         object Tools {
-            private const val version = "4.1.2"
+            private const val version = "4.1.3"
             const val buildGradle = "com.android.tools.build:gradle:$version"
         }
     }
@@ -30,7 +30,7 @@ object Libraries {
     object AndroidX {
 
         object Activity {
-            private const val version = "1.2.0-alpha06"
+            private const val version = "1.2.0"
             const val activity = "androidx.activity:activity:$version"
             const val activityKtx = "androidx.activity:activity-ktx:$version"
         }
@@ -54,7 +54,7 @@ object Libraries {
         }
 
         object Fragment {
-            private const val version = "1.3.0"
+            private const val version = "1.3.2"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
             const val test = "androidx.fragment:fragment-ktx:fragment-testing$version"
@@ -70,7 +70,7 @@ object Libraries {
         }
 
         object Paging {
-            private const val version = "3.0.0-beta02"
+            private const val version = "3.0.0-beta03"
             const val common = "androidx.paging:paging-common-ktx:$version"
             const val runtime = "androidx.paging:paging-runtime:$version"
             const val runtimeKtx = "androidx.paging:paging-runtime-ktx:$version"
@@ -114,7 +114,7 @@ object Libraries {
     }
 
     object Apollo {
-        private const val version = "2.5.4"
+        private const val version = "2.5.5"
         const val runtime = "com.apollographql.apollo:apollo-runtime:$version"
         const val android = "com.apollographql.apollo:apollo-android-support:$version"
         const val coroutines = "com.apollographql.apollo:apollo-coroutines-support:$version"
@@ -140,11 +140,6 @@ object Libraries {
         const val video = "io.coil-kt:coil-video:$version"
     }
 
-    object Dropbox {
-        private const val version = "4.0.0"
-        const val store = "com.dropbox.mobile.store:store4:$version"
-    }
-
     object Google {
 
         object Material {
@@ -161,7 +156,7 @@ object Libraries {
         }
 
         object Markdown {
-            private const val version = "0.2.0.pre-55"
+            private const val version = "0.2.1"
             const val markdown = "org.jetbrains:markdown:$version"
         }
 

@@ -1,7 +1,9 @@
 package co.anitrend.support.markdown.ephasis
 
 import co.anitrend.support.markdown.common.IMarkdownPlugin
+import co.anitrend.support.markdown.ephasis.delimiter.EmphasisDelimiter
 import io.noties.markwon.AbstractMarkwonPlugin
+import org.commonmark.parser.Parser
 
 /**
  *  Put two * or _ characters either side of the text:
@@ -21,16 +23,25 @@ class EmphasisPlugin : IMarkdownPlugin, AbstractMarkwonPlugin() {
     /**
      * Regular expression that should be used for the implementing classing
      */
-    override val regex = Regex(
-        pattern = PATTERN_EMPHASIS,
-        option = RegexOption.IGNORE_CASE
-    )
+    override val regex by lazy(LazyThreadSafetyMode.NONE) {
+        Regex(
+            pattern = PATTERN_EMPHASIS,
+            option = RegexOption.IGNORE_CASE
+        )
+    }
+
+    override fun configureParser(builder: Parser.Builder) {
+        //builder.customDelimiterProcessor(EmphasisDelimiter())
+    }
 
     override fun processMarkdown(markdown: String): String {
+        //return super.processMarkdown(markdown)
         var replacement = markdown
         val matches = regex.findAll(markdown)
         matches.forEach { matchResult ->
-            val content = matchResult.groupValues.last()
+            val matchValues = matchResult.groupValues.filterNot(String::isNullOrEmpty)
+            //val content = matchResult.groupValues.firstOrNull() ?: matchResult.groupValues.last()
+            val content = matchValues.last()
 
             replacement = replacement.replace(
                 matchResult.value,
@@ -41,7 +52,8 @@ class EmphasisPlugin : IMarkdownPlugin, AbstractMarkwonPlugin() {
     }
 
     companion object {
-        private const val PATTERN_EMPHASIS = "__([\\s\\S]*?)__"
+        // TODO: Assure that match is not blanks, e.g. ____ is not a valid match
+        private const val PATTERN_EMPHASIS = "_{2}(.*?)_{2}|\\*{2}(.*?)\\*{2}"
 
         fun create() = EmphasisPlugin()
     }

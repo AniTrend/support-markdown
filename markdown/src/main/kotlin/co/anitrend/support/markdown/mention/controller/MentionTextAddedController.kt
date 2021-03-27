@@ -15,7 +15,7 @@ internal class MentionTextAddedController(
     }
 
     fun getContent(matchResult: MatchResult): String {
-        return matchResult.groupValues[GROUP_CONTENT]
+        return matchResult.groupValues.first()
     }
 
     fun getMention(content: String): String {
@@ -25,7 +25,6 @@ internal class MentionTextAddedController(
     companion object {
         const val PATTERN_MENTION = "\\B@\\w+"
 
-        private const val GROUP_CONTENT = 0
         private const val VALUE_START_INDEX = 1
     }
 }

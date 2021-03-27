@@ -5,24 +5,19 @@ import android.text.style.ClickableSpan
 import android.view.View
 import androidx.annotation.ColorInt
 
-class SpoilerContentSpan(
-    @ColorInt private val backgroundColor: Int,
-    @ColorInt private val revealedTextColor: Int,
-    private val spoilerContent: String
+class SpoilerClickableSpan(
+    private val spoilerSpan: SpoilerSpan
 ) : ClickableSpan() {
-
-    private var isRevealed: Boolean = false
 
     /**
      * Performs the click action associated with this span.
      */
     override fun onClick(widget: View) {
-        isRevealed = !isRevealed
+        spoilerSpan.isShown = true
+        widget.postInvalidateOnAnimation()
     }
 
     override fun updateDrawState(textPaint: TextPaint) {
         textPaint.isUnderlineText = false
-        textPaint.bgColor = backgroundColor
-        textPaint.color = if (isRevealed) revealedTextColor else backgroundColor
     }
 }

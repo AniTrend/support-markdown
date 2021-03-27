@@ -27,7 +27,7 @@ object Versions {
      */
     const val versionName = "$major.$minor.$patch-$channel$candidate"
 
-    const val mockk = "1.10.6"
+    const val mockk = "1.11.0"
     const val junit = "4.13.2"
 
     const val timber = "4.7.1"
