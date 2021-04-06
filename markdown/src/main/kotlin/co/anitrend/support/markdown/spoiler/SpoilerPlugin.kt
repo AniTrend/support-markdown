@@ -1,11 +1,21 @@
 package co.anitrend.support.markdown.spoiler
 
+import android.graphics.Color
+import android.text.Spannable
+import android.text.Spanned
+import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.VisibleForTesting
 import co.anitrend.support.markdown.common.IMarkdownPlugin
+import co.anitrend.support.markdown.spoiler.node.SpoilerNode
+import co.anitrend.support.markdown.spoiler.render.SpoilerRender
+import co.anitrend.support.markdown.spoiler.span.SpoilerClickableSpan
+import co.anitrend.support.markdown.spoiler.span.SpoilerHideSpan
+import co.anitrend.support.markdown.spoiler.span.SpoilerSpan
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.MarkwonVisitor
+import org.commonmark.node.Text
 import java.lang.reflect.Modifier
 import java.net.URLEncoder
 
@@ -25,6 +35,7 @@ import java.net.URLEncoder
  * @since 0.1.0
  */
 class SpoilerPlugin private constructor(
+    @ColorInt private val textColor: Int,
     @ColorInt private val backgroundColor: Int
 ): IMarkdownPlugin, AbstractMarkwonPlugin() {
 
@@ -36,16 +47,36 @@ class SpoilerPlugin private constructor(
         option = RegexOption.IGNORE_CASE
     )
 
-    override fun configureVisitor(builder: MarkwonVisitor.Builder) {
-        //builder.on(Text::class.java, SpoilerNode(regex))
+    private fun applySpoilerSpan(spannable: Spannable) {
+        val text = spannable.toString()
+        val matches = regex.findAll(text)
+        val hideSpan = SpoilerHideSpan()
+
+        matches.forEach { matchResult ->
+            val spoilerSpan = SpoilerSpan(textColor, backgroundColor)
+            val clickableSpan = SpoilerClickableSpan(spoilerSpan)
+
+            val matchRange = matchResult.range
+
+            val start = matchRange.first
+            val end = matchRange.last + 1
+
+            spannable.setSpan(spoilerSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            // Hide spoiler markers
+            spannable.setSpan(hideSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(hideSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
     }
 
-    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-        super.configureSpansFactory(builder)
-        //builder.appendFactory(Text::class.java, SpoilerRender(backgroundColor))
+    override fun beforeSetText(textView: TextView, markdown: Spanned) {
+        super.beforeSetText(textView, markdown)
+        //applySpoilerSpan(markdown as Spannable)
     }
 
     override fun processMarkdown(markdown: String): String {
+        //return super.processMarkdown(markdown)
         var replacement = markdown
         val matches = regex.findAll(markdown)
         matches.forEach { matchResult ->
@@ -54,12 +85,12 @@ class SpoilerPlugin private constructor(
 
             replacement = replacement.replace(
                 fullMatch,
-                "[Show spoiler](app.anitrend://spoiler?data=${
+                """<a href="app.anitrend://spoiler?data=${
                     URLEncoder.encode(
                         contentMatch,
                         "utf-8"
                     )
-                })"
+                }">Spoiler, click to view</a>"""
             )
         }
         return replacement
@@ -73,7 +104,9 @@ class SpoilerPlugin private constructor(
         private const val GROUP_ORIGINAL_MATCH = 0
         private const val GROUP_CONTENT = 1
 
-        fun create(@ColorInt backgroundColor: Int) =
-            SpoilerPlugin(backgroundColor)
+        fun create(
+            @ColorInt textColor: Int = Color.BLACK,
+            @ColorInt backgroundColor: Int = Color.WHITE
+        ) = SpoilerPlugin(textColor, backgroundColor)
     }
 }

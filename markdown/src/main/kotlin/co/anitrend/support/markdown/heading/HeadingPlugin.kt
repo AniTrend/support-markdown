@@ -26,14 +26,14 @@ class HeadingPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugi
      */
     override val regex = Regex(
         pattern = PATTERN_HEADING,
-        option = RegexOption.IGNORE_CASE
+        option = RegexOption.MULTILINE
     )
 
     override fun processMarkdown(markdown: String): String {
         var replacement = markdown
         val matches = regex.findAll(markdown)
         matches.forEach { matchResult ->
-            val content = matchResult.groupValues.first()
+            val content = matchResult.groupValues.last()
 
             replacement = replacement.replace(
                 matchResult.value,
@@ -44,7 +44,8 @@ class HeadingPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugi
     }
 
     companion object {
-        private const val PATTERN_HEADING = "(.*\\n{1})(-{2,}|={2,})"
+        // TODO: only match when the line before is not a blank line
+        private const val PATTERN_HEADING = "(.*\\b\\n)(-{2,}|={2,})"
 
         fun create() = HeadingPlugin()
     }

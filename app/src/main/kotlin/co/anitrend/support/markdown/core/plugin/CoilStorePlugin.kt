@@ -28,7 +28,7 @@ internal class CoilStorePlugin private constructor(
         val size = if (width?.value != null && height?.value != null) {
             PixelSize(
                 width = width.value.toInt(),
-                height = 0
+                height = height.value.toInt()
             )
         } else OriginalSize
 

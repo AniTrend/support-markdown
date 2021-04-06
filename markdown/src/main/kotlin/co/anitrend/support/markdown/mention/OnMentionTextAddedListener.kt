@@ -1,6 +1,5 @@
 package co.anitrend.support.markdown.mention
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
 import co.anitrend.support.markdown.mention.controller.MentionTextAddedController
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
@@ -8,15 +7,9 @@ import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.core.CoreProps
 import org.commonmark.node.Link
 
-class OnMentionTextAddedListener private constructor(): CorePlugin.OnTextAddedListener,
-    IMarkdownPlugin {
-
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex: Regex = Regex("")
-
-    private val controller = MentionTextAddedController()
+class OnMentionTextAddedListener private constructor(
+    private val controller: MentionTextAddedController
+): CorePlugin.OnTextAddedListener {
 
     private fun MarkwonVisitor.setLinkSpan(source: String, start: Int, end: Int) {
         val configuration = configuration()
@@ -53,8 +46,7 @@ class OnMentionTextAddedListener private constructor(): CorePlugin.OnTextAddedLi
         val matches = controller.findAllMatches(text)
         matches.forEach { matchResult ->
             val content = controller.getContent(matchResult)
-            val mention = controller.getMention(content)
-            val url = controller.asUserUrl(mention)
+            val url = controller.asUserUrl(content)
             val matchRange = matchResult.range
             visitor.setLinkSpan(
                 url,
@@ -65,6 +57,8 @@ class OnMentionTextAddedListener private constructor(): CorePlugin.OnTextAddedLi
     }
 
     companion object {
-        fun create() = OnMentionTextAddedListener()
+        internal fun create(
+            controller: MentionTextAddedController
+        ) = OnMentionTextAddedListener(controller)
     }
 }

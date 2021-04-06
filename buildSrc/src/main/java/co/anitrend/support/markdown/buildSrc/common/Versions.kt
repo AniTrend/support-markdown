@@ -4,7 +4,7 @@ object Versions {
     private const val major = 0
     private const val minor = 12
     private const val patch = 0
-    private const val candidate = 1
+    private const val candidate = 2
 
     private const val channel = "alpha"
 
@@ -27,7 +27,7 @@ object Versions {
      */
     const val versionName = "$major.$minor.$patch-$channel$candidate"
 
-    const val mockk = "1.10.6"
+    const val mockk = "1.11.0"
     const val junit = "4.13.2"
 
     const val timber = "4.7.1"
