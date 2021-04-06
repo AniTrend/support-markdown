@@ -8,7 +8,7 @@ import org.commonmark.parser.Parser
 /**
  * Italics plugin
  */
-class ItalicsPlugin: IMarkdownPlugin, AbstractMarkwonPlugin() {
+class ItalicsPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
 
     /**
      * Regular expression that should be used for the implementing classing

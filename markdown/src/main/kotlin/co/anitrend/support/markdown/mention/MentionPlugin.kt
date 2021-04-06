@@ -23,11 +23,10 @@ class MentionPlugin private constructor(): AbstractMarkwonPlugin() {
         val matches = controller.findAllMatches(markdown)
         matches.forEach { matchResult ->
             val content = controller.getContent(matchResult)
-            val mention = controller.getMention(content)
-            val url = controller.asUserUrl(mention)
+            val url = controller.asUserUrl(content)
             replacement = replacement.replace(
-                matchResult.value,
-                """<a href="$url">$content</a>"""
+                matchResult.value.trim(),
+                """<a href="$url">@$content</a>"""
             )
         }
         return replacement

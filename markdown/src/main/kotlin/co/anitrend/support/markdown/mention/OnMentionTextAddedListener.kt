@@ -46,8 +46,7 @@ class OnMentionTextAddedListener private constructor(
         val matches = controller.findAllMatches(text)
         matches.forEach { matchResult ->
             val content = controller.getContent(matchResult)
-            val mention = controller.getMention(content)
-            val url = controller.asUserUrl(mention)
+            val url = controller.asUserUrl(content)
             val matchRange = matchResult.range
             visitor.setLinkSpan(
                 url,

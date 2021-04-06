@@ -1,5 +1,6 @@
 package co.anitrend.support.markdown.spoiler
 
+import android.graphics.Color
 import android.text.Spannable
 import android.text.Spanned
 import android.widget.TextView
@@ -103,7 +104,9 @@ class SpoilerPlugin private constructor(
         private const val GROUP_ORIGINAL_MATCH = 0
         private const val GROUP_CONTENT = 1
 
-        fun create(@ColorInt textColor: Int, @ColorInt backgroundColor: Int) =
-            SpoilerPlugin(textColor, backgroundColor)
+        fun create(
+            @ColorInt textColor: Int = Color.BLACK,
+            @ColorInt backgroundColor: Int = Color.WHITE
+        ) = SpoilerPlugin(textColor, backgroundColor)
     }
 }
