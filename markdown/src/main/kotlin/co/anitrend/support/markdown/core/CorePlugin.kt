@@ -17,15 +17,14 @@ import org.commonmark.node.SoftLineBreak
  *
  * @since 0.1.0
  */
-class CorePlugin private constructor(): AbstractMarkwonPlugin() {
+class CorePlugin private constructor(
+    private val autoCloseTags: Boolean
+): AbstractMarkwonPlugin() {
 
     private val regex by lazy(LazyThreadSafetyMode.NONE) {
         Regex(
-            "\\[(.*?)\\]\\((.*?)\\)",
-            options = setOf(
-                RegexOption.IGNORE_CASE,
-                RegexOption.MULTILINE
-            )
+            "\\[(.*?)]\\((.*?)\\)",
+            option = RegexOption.IGNORE_CASE
         )
     }
 
@@ -44,7 +43,7 @@ class CorePlugin private constructor(): AbstractMarkwonPlugin() {
         registry.require(HtmlPlugin::class.java) { html ->
             html.addHandler(AlignTagHandler())
             html.addHandler(CenterTagHandler())
-            html.allowNonClosedTags(true)
+            html.allowNonClosedTags(autoCloseTags)
             html.emptyTagReplacement(
                 object : HtmlEmptyTagReplacement() {
                     /**
@@ -86,6 +85,8 @@ class CorePlugin private constructor(): AbstractMarkwonPlugin() {
     }
 
     companion object {
-        fun create() = CorePlugin()
+        fun create(
+            autoCloseTags: Boolean = true,
+        ) = CorePlugin(autoCloseTags)
     }
 }
