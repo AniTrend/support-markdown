@@ -8,7 +8,7 @@ import io.noties.markwon.AbstractMarkwonPlugin
  *
  * @since 0.12.0
  */
-class LinkifyPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+internal class LinkifyPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
 
     /**
      * Regular expression that should be used for the implementing classing
