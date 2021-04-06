@@ -5,7 +5,7 @@ package co.anitrend.support.markdown.common.controller
  *
  * @since 0.12.0
  */
-internal abstract class MarkdownPluginController {
+abstract class MarkdownPluginController {
 
     /**
      * Regular expression that should be used for the implementing classing

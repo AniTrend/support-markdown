@@ -102,7 +102,6 @@ internal class FeedAdapter(
             val markDownText = feed?.text ?: "**No content available**"
 
             Log.i(javaClass.simpleName, "${feed?.user?.id} | ${feed?.user?.name}")
-            Log.i(javaClass.simpleName, "${feed?.text}")
             binding.feedText.setMarkdown(markwon, markDownText)
         }
 

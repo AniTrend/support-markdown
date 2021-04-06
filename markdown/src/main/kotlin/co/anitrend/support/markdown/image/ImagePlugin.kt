@@ -32,40 +32,53 @@ class ImagePlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin(
     )
 
     override fun configure(registry: MarkwonPlugin.Registry) {
-        registry.require(CorePlugin::class.java) { corePlugin: CorePlugin ->
-            corePlugin.addOnTextAddedListener { visitor, text, start ->
-                constructImageHandler(visitor, text, start)
-            }
+        registry.require(CorePlugin::class.java) { plugin: CorePlugin ->
+            //corePlugin.addOnTextAddedListener { visitor, text, start ->
+            //    constructImageHandler(visitor, text, start)
+            //}
         }
     }
 
-    private fun applyImageSizeDimensions(imageSize: String, renderProps: RenderProps) {
+    private fun getImageSize(imageSize: String): ImageSize.Dimension {
         val imageSizeLength = imageSize.length
-        val dimension: ImageSize.Dimension = when {
+        return when {
             imageSize.endsWith('%') -> {
                 val percentageSize = imageSize.substring(0, imageSizeLength - 1)
                 percentageSize.toFloatOrNull()?.let { value ->
-                    if (value <= 100)
-                        ImageSize.Dimension(value, "%")
-                    else null
+                    when {
+                        value <= 10 -> ImageSize.Dimension(value.times(2), "%")
+                        value <= 30 -> ImageSize.Dimension(value.times(1.5f), "%")
+                        value <= 100 -> ImageSize.Dimension(value, "%")
+                        else -> null
+                    }
                 }
             }
             imageSize.endsWith("px") -> {
                 val pixelSize = imageSize.substring(0, imageSizeLength - 2)
                 pixelSize.toFloatOrNull()?.let { value ->
-                    if (value <= 1000)
-                        ImageSize.Dimension(value, "px")
-                    else null
+                    when {
+                        value <= 100 -> ImageSize.Dimension(value.times(2), "%")
+                        value <= 300 -> ImageSize.Dimension(value.times(1.5f), "%")
+                        value <= 1000 -> ImageSize.Dimension(value, "px")
+                        else -> null
+                    }
                 }
             }
             else -> {
                 imageSize.toFloatOrNull()?.let { value ->
-                    if (value <= 1000)
-                        ImageSize.Dimension(value.div(10), "%")
-                    else null
+                    when {
+                        value <= 200 -> ImageSize.Dimension(value.div(2), "%")
+                        value <= 500 -> ImageSize.Dimension(value.div(5), "%")
+                        value <= 1000 -> ImageSize.Dimension(value.div(10), "%")
+                        else -> null
+                    }
                 }
             }
         } ?: ImageSize.Dimension(100f, "%")
+    }
+
+    private fun applyImageSizeDimensions(imageSize: String, renderProps: RenderProps) {
+        val dimension = getImageSize(imageSize)
 
         ImageProps.IMAGE_SIZE.set(
             renderProps,
@@ -106,11 +119,28 @@ class ImagePlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin(
         }
     }
 
-    companion object {
-        private const val PATTERN_IMAGE = "(img(\\d*|\\d*px|\\d*%))\\((.+)\\)"
+    override fun processMarkdown(markdown: String): String {
+        var replacement = markdown
+        val matches = regex.findAll(markdown)
+        matches.forEach { matchResult ->
+            val imageSize = matchResult.groupValues[GROUP_IMAGE_SIZE]
+            val imageSource = matchResult.groupValues[GROUP_IMAGE_SRC]
 
-        private const val GROUP_IMAGE_SIZE = 2
-        private const val GROUP_IMAGE_SRC = 3
+            val dimensions = getImageSize(imageSize)
+
+            replacement = replacement.replace(
+                matchResult.value,
+                """<img src="${imageSource.trim()}" width="${dimensions.value.toInt()}${dimensions.unit}" />"""
+            )
+        }
+        return replacement
+    }
+
+    companion object {
+        private const val PATTERN_IMAGE = "img\\s?(\\d*|\\d*px|\\d*%)?\\s?\\((.[\\S]+)\\)"
+
+        private const val GROUP_IMAGE_SIZE = 1
+        private const val GROUP_IMAGE_SRC = 2
 
         fun create() =
             ImagePlugin()

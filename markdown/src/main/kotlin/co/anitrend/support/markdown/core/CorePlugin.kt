@@ -1,15 +1,15 @@
 package co.anitrend.support.markdown.core
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
+import android.util.Log
 import co.anitrend.support.markdown.html.AlignTagHandler
 import co.anitrend.support.markdown.html.CenterTagHandler
-import co.anitrend.support.markdown.mention.OnMentionTextAddedListener
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.MarkwonVisitor
-import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.html.HtmlEmptyTagReplacement
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.html.HtmlTag
 import org.commonmark.node.SoftLineBreak
 
 /**
@@ -17,12 +17,16 @@ import org.commonmark.node.SoftLineBreak
  *
  * @since 0.1.0
  */
-class CorePlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+class CorePlugin private constructor(
+    private val autoCloseTags: Boolean
+): AbstractMarkwonPlugin() {
 
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex: Regex = Regex("-{3}|\\*{3}|_{3,}")
+    private val regex by lazy(LazyThreadSafetyMode.NONE) {
+        Regex(
+            "\\[(.*?)]\\((.*?)\\)",
+            option = RegexOption.IGNORE_CASE
+        )
+    }
 
     override fun configureTheme(builder: MarkwonTheme.Builder) {
         super.configureTheme(builder)
@@ -39,19 +43,50 @@ class CorePlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin()
         registry.require(HtmlPlugin::class.java) { html ->
             html.addHandler(AlignTagHandler())
             html.addHandler(CenterTagHandler())
-        }
-        registry.require(CorePlugin::class.java) { core ->
-            core.addOnTextAddedListener(
-                OnMentionTextAddedListener.create()
+            html.allowNonClosedTags(autoCloseTags)
+            html.emptyTagReplacement(
+                object : HtmlEmptyTagReplacement() {
+                    /**
+                     * @return replacement for supplied startTag or null if no replacement should occur (which will
+                     * lead to `Inline` tag have start &amp; end the same value, thus not applicable for applying a Span)
+                     */
+                    override fun replace(tag: HtmlTag): String? {
+                        Log.i("CorePlugin","Empty tag $tag")
+                        when {
+                            tag.isBlock -> {
+                                val block = tag.asBlock
+                                // edge case where a user may use multiple <center> tags without closing them
+                                if (block.parent()?.isBlock == true && block.parent()?.isClosed == false) {
+                                    val parent = block.parent()
+                                }
+                            }
+                        }
+                        return super.replace(tag)
+                    }
+                }
             )
         }
     }
 
     override fun processMarkdown(markdown: String): String {
-        return regex.replace(markdown, "<hr />")
+        var replacement = markdown
+        val matches = regex.findAll(markdown)
+        matches.forEach { matchResult ->
+            val value = matchResult.value
+            val tag = matchResult.groupValues[1]
+            val src = matchResult.groupValues.last()
+
+            replacement = replacement.replace(
+                value,
+                """<a href="$src">${tag}</a>"""
+            )
+        }
+        return replacement
     }
 
     companion object {
-        fun create() = CorePlugin()
+        fun create(
+            autoCloseTags: Boolean = true,
+        ) = CorePlugin(autoCloseTags)
     }
 }

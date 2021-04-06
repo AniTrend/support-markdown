@@ -1,6 +1,8 @@
 package co.anitrend.support.markdown.sample.koin
 
+import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
+import android.util.Log
 import androidx.core.content.ContextCompat
 import co.anitrend.support.markdown.center.CenterPlugin
 import co.anitrend.support.markdown.core.CorePlugin
@@ -8,8 +10,11 @@ import co.anitrend.support.markdown.core.plugin.CoilStorePlugin
 import co.anitrend.support.markdown.data.koin.dataModules
 import co.anitrend.support.markdown.ephasis.EmphasisPlugin
 import co.anitrend.support.markdown.heading.HeadingPlugin
+import co.anitrend.support.markdown.horizontal.HorizontalLinePlugin
 import co.anitrend.support.markdown.image.ImagePlugin
+import co.anitrend.support.markdown.italics.ItalicsPlugin
 import co.anitrend.support.markdown.link.LinkifyPlugin
+import co.anitrend.support.markdown.mention.MentionPlugin
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.component.MainActivity
 import co.anitrend.support.markdown.sample.feed.FeedFragment
@@ -19,12 +24,14 @@ import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedV
 import co.anitrend.support.markdown.spoiler.SpoilerPlugin
 import co.anitrend.support.markdown.webm.WebMPlugin
 import co.anitrend.support.markdown.youtube.YouTubePlugin
+import coil.Coil
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import coil.util.CoilUtils
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
@@ -39,7 +46,7 @@ import org.koin.dsl.module
 private val coreModule = module {
     single {
         val context = androidContext()
-        val color = ContextCompat.getColor(
+        val backgroundColor = ContextCompat.getColor(
                 context,
                 R.color.colorAccent
             )
@@ -49,27 +56,42 @@ private val coreModule = module {
         ).toFloat()
 
         Markwon.builder(context)
+            .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun processMarkdown(markdown: String): String {
+                    Log.i("BEFORE_PROCESSING", markdown)
+                    return super.processMarkdown(markdown)
+                }
+            })
             .usePlugin(HtmlPlugin.create())
             .usePlugin(CorePlugin.create())
-            .usePlugin(LinkifyPlugin.create())
+            .usePlugin(MentionPlugin.create())
+            .usePlugin(HorizontalLinePlugin.create())
             .usePlugin(HeadingPlugin.create())
             .usePlugin(EmphasisPlugin.create())
             .usePlugin(CenterPlugin.create())
             .usePlugin(ImagePlugin.create())
             .usePlugin(WebMPlugin.create())
             .usePlugin(YouTubePlugin.create())
-            .usePlugin(SpoilerPlugin.create(color))
+            .usePlugin(SpoilerPlugin.create(Color.BLACK, backgroundColor))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TaskListPlugin.create(context))
+            .usePlugin(ItalicsPlugin.create())
             .usePlugin(
                 CoilImagesPlugin.create(
                     CoilStorePlugin.create(
                         ImageRequest.Builder(context)
                             .transformations(RoundedCornersTransformation(radius))
                     ),
-                    get()
+                    Coil.imageLoader(context)
                 )
             )
+            //.usePlugin(LinkifyPlugin.create())
+            .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun processMarkdown(markdown: String): String {
+                    Log.i("AFTER_PROCESSING", markdown)
+                    return super.processMarkdown(markdown)
+                }
+            })
             .build()
     }
 }

@@ -15,7 +15,6 @@ fun Context.displayWidth(): Int {
 }
 
 fun AppCompatTextView.setMarkdown(markwon: Markwon, text: String) {
-    Linkify.addLinks(this, Linkify.ALL)
     movementMethod = BetterLinkMovementMethod.newInstance().apply {
         setOnLinkClickListener { textView, url ->
             // Handle click or return false to let the framework handle this link.

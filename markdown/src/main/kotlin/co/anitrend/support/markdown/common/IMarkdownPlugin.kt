@@ -13,7 +13,7 @@ interface IMarkdownPlugin {
     val regex: Regex
 
     companion object {
-        const val VIDEO_THUMBNAIL_URL = "http://placehold.it/1280x720?text=No+Preview+Available"
+        const val VIDEO_THUMBNAIL_URL = "https://via.placeholder.com/1280x720?text=Click+to+watch+video"
         const val SITE_URL = "https://anilist.co"
     }
 }

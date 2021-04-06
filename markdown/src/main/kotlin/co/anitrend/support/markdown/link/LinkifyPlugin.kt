@@ -8,7 +8,7 @@ import io.noties.markwon.AbstractMarkwonPlugin
  *
  * @since 0.12.0
  */
-class LinkifyPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+internal class LinkifyPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
 
     /**
      * Regular expression that should be used for the implementing classing
@@ -21,13 +21,15 @@ class LinkifyPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugi
         matches.forEach { matchResult ->
             val value = matchResult.value
             replacement = replacement.replace(
-                value, "[$value](${value})"
+                value,
+                """<a href="$value">${value}</a>"""
             )
         }
         return replacement
     }
 
     companion object {
+        // Requires some extra attention, linkifies some anchor tags
         private const val PATTERN_LINK = "((?<=\\s)|^)(http|ftp|https):\\/\\/([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:\\/~+#-]*[\\w@?^=%&\\/~+#-])?"
 
         fun create() = LinkifyPlugin()

@@ -11,13 +11,20 @@ apollo {
 }
 
 configurations {
-    getByName("compile") {
+    fun  excludeDefault() {
         compile.get().exclude(
             mapOf(
                 "group" to "org.jetbrains",
                 "module" to "annotations"
             )
         )
+    }
+    println("Configurations available [${configurations.joinToString()}]")
+    getByName("compile") {
+        excludeDefault()
+    }
+    getByName("androidTestCompile") {
+        excludeDefault()
     }
 }
 
@@ -38,8 +45,6 @@ dependencies {
     implementation(Libraries.AndroidX.Paging.runtime)
     implementation(Libraries.AndroidX.Paging.runtimeKtx)
 
-    implementation(Libraries.Dropbox.store)
-
     implementation(Libraries.Apollo.runtime)
     implementation(Libraries.Apollo.android)
     implementation(Libraries.Apollo.coroutines)
@@ -56,6 +61,8 @@ dependencies {
     implementation(Libraries.JetBrains.Markdown.markdown)
 
     implementation(Libraries.Coil.coil)
+    implementation(Libraries.Coil.video)
+    implementation(Libraries.Coil.svg)
     implementation(Libraries.Coil.gif)
 
     implementation(Libraries.betterLinkMovement)

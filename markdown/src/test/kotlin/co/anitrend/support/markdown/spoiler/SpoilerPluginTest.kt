@@ -1,5 +1,6 @@
 package co.anitrend.support.markdown.spoiler
 
+import android.graphics.Color
 import co.anitrend.support.markdown.ICoreRegexTest
 import co.anitrend.support.markdown.common.IMarkdownPlugin
 import org.junit.Assert.*
@@ -13,7 +14,7 @@ import org.junit.Test
 class SpoilerPluginTest : ICoreRegexTest {
 
     override val plugin by lazy {
-        SpoilerPlugin.create(0xFFF)
+        SpoilerPlugin.create(Color.BLACK, Color.BLUE)
     }
 
     @Test
