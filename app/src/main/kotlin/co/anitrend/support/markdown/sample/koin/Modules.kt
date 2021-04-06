@@ -1,9 +1,7 @@
 package co.anitrend.support.markdown.sample.koin
 
-import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
-import androidx.core.content.ContextCompat
 import co.anitrend.support.markdown.center.CenterPlugin
 import co.anitrend.support.markdown.core.CorePlugin
 import co.anitrend.support.markdown.core.plugin.CoilStorePlugin
@@ -13,7 +11,6 @@ import co.anitrend.support.markdown.heading.HeadingPlugin
 import co.anitrend.support.markdown.horizontal.HorizontalLinePlugin
 import co.anitrend.support.markdown.image.ImagePlugin
 import co.anitrend.support.markdown.italics.ItalicsPlugin
-import co.anitrend.support.markdown.link.LinkifyPlugin
 import co.anitrend.support.markdown.mention.MentionPlugin
 import co.anitrend.support.markdown.sample.R
 import co.anitrend.support.markdown.sample.component.MainActivity
@@ -22,6 +19,7 @@ import co.anitrend.support.markdown.sample.feed.adapter.FeedAdapter
 import co.anitrend.support.markdown.sample.feed.viewmodel.FeedViewModel
 import co.anitrend.support.markdown.sample.feed.viewmodel.contract.AbstractFeedViewModel
 import co.anitrend.support.markdown.spoiler.SpoilerPlugin
+import co.anitrend.support.markdown.strike.StrikeThroughPlugin
 import co.anitrend.support.markdown.webm.WebMPlugin
 import co.anitrend.support.markdown.youtube.YouTubePlugin
 import coil.Coil
@@ -37,6 +35,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.coil.CoilImagesPlugin
+import io.noties.markwon.linkify.LinkifyPlugin
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.fragment.dsl.fragment
@@ -46,10 +45,6 @@ import org.koin.dsl.module
 private val coreModule = module {
     single {
         val context = androidContext()
-        val backgroundColor = ContextCompat.getColor(
-                context,
-                R.color.colorAccent
-            )
 
         val radius = context.resources.getDimensionPixelSize(
             R.dimen.margin_md
@@ -72,7 +67,9 @@ private val coreModule = module {
             .usePlugin(ImagePlugin.create())
             .usePlugin(WebMPlugin.create())
             .usePlugin(YouTubePlugin.create())
-            .usePlugin(SpoilerPlugin.create(Color.BLACK, backgroundColor))
+            .usePlugin(SpoilerPlugin.create())
+            .usePlugin(LinkifyPlugin.create())
+            .usePlugin(StrikeThroughPlugin.create())
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TaskListPlugin.create(context))
             .usePlugin(ItalicsPlugin.create())
@@ -85,7 +82,6 @@ private val coreModule = module {
                     Coil.imageLoader(context)
                 )
             )
-            //.usePlugin(LinkifyPlugin.create())
             .usePlugin(object : AbstractMarkwonPlugin() {
                 override fun processMarkdown(markdown: String): String {
                     Log.i("AFTER_PROCESSING", markdown)
