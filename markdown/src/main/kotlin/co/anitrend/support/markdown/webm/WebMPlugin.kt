@@ -1,7 +1,6 @@
 package co.anitrend.support.markdown.webm
 
 import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.common.IMarkdownPlugin.Companion.VIDEO_THUMBNAIL_URL
 import io.noties.markwon.AbstractMarkwonPlugin
 
 /**
@@ -32,7 +31,7 @@ class WebMPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin()
 
             replacement = replacement.replace(
                 matchResult.value,
-                """<a href="$resourceUrl"><img src="$VIDEO_THUMBNAIL_URL" /></a>"""
+                """<a href="$resourceUrl"><img src="$resourceUrl" /></a>"""
             )
         }
         return replacement
