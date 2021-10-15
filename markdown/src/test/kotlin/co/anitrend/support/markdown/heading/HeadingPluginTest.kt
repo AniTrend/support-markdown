@@ -44,13 +44,38 @@ class HeadingPluginTest : ICoreRegexTest {
 
             Alternatively, you can use the <hr> HTML tag. 
         """.trimIndent()
+        val testCaseExpected = """
+            <h1>Hello this is a title</h1>
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
+            <h1>this is also another title</h1>
 
-        val matchResultSet = plugin.regex.findAll(testCase)
+            ---
+            what about this?
+            *****
 
-        val actual = matchResultSet.count()
-        assertEquals(3, actual)
+            Make sure to have a blank line either side to avoid ambiguity: 
+            this is a header
+            - - - - - - - - - - - - - - 
+
+            this is text followed by a horizontal line
+            _ _ _ _
+
+            Nanikore *** wiykd akhf k kajfhl safh
+            ___
+            skjadlkjfweafs lasdkfewa
+
+
+            ***
+
+            Make sure to have a blank line either side to avoid ambiguity: 
+            <h1>this is a header</h1>
+            <h1>this is text followed by a horizontal line</h1>
+
+            Alternatively, you can use the <hr> HTML tag. 
+        """.trimIndent()
+
+        val actual = plugin.processMarkdown(testCase)
+        assertEquals(testCaseExpected, actual)
     }
 
     @Test
@@ -73,11 +98,7 @@ class HeadingPluginTest : ICoreRegexTest {
             I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
         """.trimIndent()
 
-        assertFalse(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase)
-
-        val actual = matchResultSet.count()
-        assertEquals(0, actual)
+        val actual = plugin.processMarkdown(testCase)
+        assertEquals(testCase, actual)
     }
 }
