@@ -52,8 +52,7 @@ class EmphasisPlugin : IMarkdownPlugin, AbstractMarkwonPlugin() {
     }
 
     companion object {
-        // TODO: Assure that match is not blanks, e.g. ____ is not a valid match
-        private const val PATTERN_EMPHASIS = "_{2}(.*?)_{2}|\\*{2}(.*?)\\*{2}"
+        private const val PATTERN_EMPHASIS = "([_*]{2})(.+?)\\1"
 
         fun create() = EmphasisPlugin()
     }
