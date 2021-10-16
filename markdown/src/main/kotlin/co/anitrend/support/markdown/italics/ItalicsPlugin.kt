@@ -1,9 +1,9 @@
 package co.anitrend.support.markdown.italics
 
 import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.italics.delimiter.ItalicsDelimiter
 import io.noties.markwon.AbstractMarkwonPlugin
-import org.commonmark.parser.Parser
+import io.noties.markwon.editor.MarkwonEditorUtils
+
 
 /**
  * Italics plugin
@@ -14,33 +14,37 @@ class ItalicsPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugi
      * Regular expression that should be used for the implementing classing
      */
     override val regex by lazy(LazyThreadSafetyMode.NONE) {
-        Regex(
-            pattern = PATTERN_EMPHASIS,
-            options = setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE)
-        )
-    }
-
-    override fun configureParser(builder: Parser.Builder) {
-        //builder.customDelimiterProcessor(ItalicsDelimiter())
+        Regex("")
     }
 
     override fun processMarkdown(markdown: String): String {
-        var replacement = markdown
-        val matches = regex.findAll(markdown)
-        matches.forEach { matchResult ->
-            val content = matchResult.groupValues.last()
+        val replacement = mutableListOf<String>()
 
-            replacement = replacement.replace(
-                matchResult.value,
-                "<i>$content</i>"
-            )
+        markdown.split("\n").forEach {
+            var start = 0
+            var line = it
+
+            while (true) {
+                val match = MarkwonEditorUtils.findDelimited(line, start, "*") ?: break
+                if (match.end() - match.start() == 2) {
+                    start = match.end()
+                    continue
+                }
+
+                var temporary = line.substring(0, match.start())
+                temporary += "<i>${line.substring(match.start() + 1, match.end() - 1)}</i>"
+                temporary += line.substring(match.end())
+
+                line = temporary
+            }
+
+            replacement.add(line)
         }
-        return replacement
+
+        return replacement.joinToString("\n")
     }
 
     companion object {
-        private const val PATTERN_EMPHASIS = "\\*(.*)\\*"
-
         fun create() = ItalicsPlugin()
     }
 }

@@ -29,12 +29,25 @@ class ItalicsPluginTest : ICoreRegexTest {
             ____
             I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
         """.trimIndent()
+        val testCaseExpected = """
+            <Center> <a>  **OP and ED of the day** </a>
+            <Center>  <i>Thanks for the nomination @neonwolf!!!</i>
+            ____
+            <Center>  **OP** 
+            youtube(https://youtu.be/_DIqplrohhg)
+            
+            **Harumodoki** by **Yanagi Nagi**
+            __
+            
+            **ED**
+            youtube(https://youtu.be/L3WiZx_XUOo)
+            
+            **Everyday World** 
+            ____
+            I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
+        """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
-
-        val actual = matchResultSet.count()
-        assertEquals(1, actual)
+        val actual = plugin.processMarkdown(testCase)
+        assertEquals(testCaseExpected, actual)
     }
 }

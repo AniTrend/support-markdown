@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation(Libraries.Markwon.core)
+    implementation(Libraries.Markwon.editor)
     implementation(Libraries.Markwon.html)
     implementation(Libraries.Markwon.coil)
     implementation(Libraries.Markwon.parser)
