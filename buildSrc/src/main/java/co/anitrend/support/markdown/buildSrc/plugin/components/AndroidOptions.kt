@@ -1,25 +1,15 @@
 package co.anitrend.support.markdown.buildSrc.plugin.components
 
-import org.gradle.api.Project
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.get
-import org.jetbrains.dokka.gradle.DokkaTask
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseAppExtension
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.androidExtensionsExtension
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.publishingExtension
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.libraryExtension
 import co.anitrend.support.markdown.buildSrc.common.Versions
 import co.anitrend.support.markdown.buildSrc.common.isLibraryModule
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.publishingExtension
 import com.android.build.gradle.internal.dsl.BuildType
-import com.android.build.gradle.internal.dsl.DefaultConfig
-import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.javadoc.Javadoc
+import org.gradle.api.tasks.bundling.Jar
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
-import java.io.File
-import java.net.URL
 import java.util.*
 
 private fun Properties.applyToBuildConfigForBuild(buildType: BuildType) {

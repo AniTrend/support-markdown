@@ -1,11 +1,9 @@
 package co.anitrend.support.markdown.buildSrc.plugin.components
 
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
 import co.anitrend.support.markdown.buildSrc.common.Versions
-import co.anitrend.support.markdown.buildSrc.common.isLibraryModule
 import co.anitrend.support.markdown.buildSrc.common.isSampleModule
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseAppExtension
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.libraryExtension
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -31,8 +29,8 @@ private fun DefaultConfig.applyAdditionalConfiguration(project: Project) {
 internal fun Project.configureAndroid(): Unit = baseExtension().run {
     compileSdkVersion(Versions.compileSdk)
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
         versionName = Versions.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -53,9 +51,9 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
     }
 
     packagingOptions {
-        exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/LICENSE.txt")
+        excludes.add("META-INF/NOTICE.txt")
+        excludes.add("META-INF/LICENSE")
+        excludes.add("META-INF/LICENSE.txt")
     }
 
     sourceSets {
