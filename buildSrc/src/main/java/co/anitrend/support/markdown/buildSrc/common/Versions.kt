@@ -3,8 +3,8 @@ package co.anitrend.support.markdown.buildSrc.common
 object Versions {
     private const val major = 0
     private const val minor = 12
-    private const val patch = 0
-    private const val candidate = 3
+    private const val patch = 1
+    private const val candidate = 0
 
     private const val channel = "alpha"
 
@@ -25,7 +25,10 @@ object Versions {
      * Naming schema: X.Y.Z-variant##
      * > **X**(Major).**Y**(Minor).**Z**(Patch)
      */
-    const val versionName = "$major.$minor.$patch-$channel$candidate"
+    val versionName = if (candidate > 0)
+        "$major.$minor.$patch-$channel$candidate"
+    else
+        "$major.$minor.$patch"
 
     const val mockk = "1.11.0"
     const val junit = "4.13.2"
@@ -34,5 +37,5 @@ object Versions {
 
     const val betterLinkMovement = "2.2.0"
 
-    const val elements = "0.5.0"
+    const val elements = "1.0.1"
 }
