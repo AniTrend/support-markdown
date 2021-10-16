@@ -124,13 +124,6 @@ class EmphasisPluginTest : ICoreRegexTest {
             99. Female character’s best yukata
             100. Favorite harem/reverse harem!~
         """.trimIndent()
-
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
-
-        val actual = matchResultSet.count()
-        assertEquals(2, actual)
     }
 
     @Test
@@ -152,12 +145,25 @@ class EmphasisPluginTest : ICoreRegexTest {
             ____
             I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
         """.trimIndent()
+        val testCaseExpected = """
+            <Center> <a>  <b>OP and ED of the day</b> </a>
+            <Center>  *Thanks for the nomination @neonwolf!!!*
+            ____
+            <Center>  <b>OP</b> 
+            youtube(https://youtu.be/_DIqplrohhg)
+            
+            <b>Harumodoki</b> by <b>Yanagi Nagi</b>
+            __
+            
+            <b>ED</b>
+            youtube(https://youtu.be/L3WiZx_XUOo)
+            
+            <b>Everyday World</b> 
+            ____
+            I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
+        """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
-
-        val actual = matchResultSet.count()
-        assertEquals(6, actual)
+        val actual = plugin.processMarkdown(testCase)
+        assertEquals(testCaseExpected, actual)
     }
 }

@@ -1,9 +1,8 @@
 package co.anitrend.support.markdown.ephasis
 
 import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.ephasis.delimiter.EmphasisDelimiter
 import io.noties.markwon.AbstractMarkwonPlugin
-import org.commonmark.parser.Parser
+import io.noties.markwon.editor.MarkwonEditorUtils
 
 /**
  *  Put two * or _ characters either side of the text:
@@ -24,37 +23,32 @@ class EmphasisPlugin : IMarkdownPlugin, AbstractMarkwonPlugin() {
      * Regular expression that should be used for the implementing classing
      */
     override val regex by lazy(LazyThreadSafetyMode.NONE) {
-        Regex(
-            pattern = PATTERN_EMPHASIS,
-            option = RegexOption.IGNORE_CASE
-        )
-    }
-
-    override fun configureParser(builder: Parser.Builder) {
-        //builder.customDelimiterProcessor(EmphasisDelimiter())
+        Regex("")
     }
 
     override fun processMarkdown(markdown: String): String {
-        //return super.processMarkdown(markdown)
-        var replacement = markdown
-        val matches = regex.findAll(markdown)
-        matches.forEach { matchResult ->
-            val matchValues = matchResult.groupValues.filterNot(String::isNullOrEmpty)
-            //val content = matchResult.groupValues.firstOrNull() ?: matchResult.groupValues.last()
-            val content = matchValues.last()
+        val replacement = mutableListOf<String>()
 
-            replacement = replacement.replace(
-                matchResult.value,
-                "<b>$content</b>"
-            )
+        markdown.split("\n").forEach {
+            var line = it
+
+            while (true) {
+                val match = MarkwonEditorUtils.findDelimited(line, 0, "**", "__") ?: break
+
+                var temporary = line.substring(0, match.start())
+                temporary += "<b>${line.substring(match.start() + 2, match.end() - 2)}</b>"
+                temporary += line.substring(match.end())
+
+                line = temporary
+            }
+
+            replacement.add(line)
         }
-        return replacement
+
+        return replacement.joinToString("\n")
     }
 
     companion object {
-        // TODO: Assure that match is not blanks, e.g. ____ is not a valid match
-        private const val PATTERN_EMPHASIS = "_{2}(.*?)_{2}|\\*{2}(.*?)\\*{2}"
-
         fun create() = EmphasisPlugin()
     }
 }
