@@ -1,4 +1,5 @@
 import co.anitrend.support.markdown.buildSrc.Libraries
+import org.gradle.api.artifacts.Configuration
 
 plugins {
     id("co.anitrend.support.markdown")
@@ -11,8 +12,8 @@ apollo {
 }
 
 configurations {
-    fun  excludeDefault() {
-        compile.get().exclude(
+    fun  excludeDefault(configuration: Configuration) {
+        configuration.exclude(
             mapOf(
                 "group" to "org.jetbrains",
                 "module" to "annotations"
@@ -20,11 +21,11 @@ configurations {
         )
     }
     println("Configurations available [${configurations.joinToString()}]")
-    getByName("compile") {
-        excludeDefault()
+    getByName("implementation") {
+        excludeDefault(this)
     }
-    getByName("androidTestCompile") {
-        excludeDefault()
+    getByName("androidTestImplementation") {
+        excludeDefault(this)
     }
 }
 
