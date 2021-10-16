@@ -4,6 +4,24 @@ plugins {
 	id("co.anitrend.support.markdown")
 }
 
+configurations {
+    fun  excludeDefault(configuration: Configuration) {
+        configuration.exclude(
+            mapOf(
+                "group" to "org.jetbrains",
+                "module" to "annotations"
+            )
+        )
+    }
+    println("Configurations available [${configurations.joinToString()}]")
+    getByName("implementation") {
+        excludeDefault(this)
+    }
+    getByName("androidTestImplementation") {
+        excludeDefault(this)
+    }
+}
+
 dependencies {
     implementation(Libraries.Markwon.core)
     implementation(Libraries.Markwon.editor)
