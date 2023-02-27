@@ -1,38 +1,55 @@
-import java.net.URI
+import org.gradle.accessors.dm.LibrariesForLibs
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 plugins {
     `kotlin-dsl`
     `maven-publish`
+    `version-catalog`
 }
 
 repositories {
     google()
     jcenter()
     mavenCentral()
+    gradlePluginPortal()
     maven {
-        url = URI("https://www.jitpack.io")
+        setUrl("https://plugins.gradle.org/m2/")
+    }
+    maven {
+        setUrl("https://www.jitpack.io")
     }
 }
 
-val buildToolsVersion = "7.0.2"
-val kotlinVersion = "1.4.32"
-val dokkaVersion = "1.4.30"
-val manesVersion = "0.33.0"
+tasks.withType(KotlinJvmCompile::class.java) {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+val libs = extensions.getByType<LibrariesForLibs>()
 
 dependencies {
-    /* Depend on the android gradle plugin, since we want to access it in our plugin */
-    implementation("com.android.tools.build:gradle:$buildToolsVersion")
+    /** Depend on the android gradle plugin, since we want to access it in our plugin */
+    implementation(libs.android.gradle.plugin)
 
-    /* Depend on the kotlin plugin, since we want to access it in our plugin */
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    /** Depend on the kotlin plugin, since we want to access it in our plugin */
+    implementation(libs.jetbrains.kotlin.gradle)
 
-    /* Depend on the dokka plugin, since we want to access it in our plugin */
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
+    /** Depend on the dokka plugin, since we want to access it in our plugin */
+    implementation(libs.jetbrains.dokka.gradle)
 
-    /** Dependency management */
-    implementation("com.github.ben-manes:gradle-versions-plugin:$manesVersion")
+    /** Spotless */
+    implementation(libs.spotless.gradle)
 
     /* Depend on the default Gradle API's since we want to build a custom plugin */
     implementation(gradleApi())
     implementation(localGroovy())
+
+    /** Work around to include ../.gradle/LibrariesForLibs generated file for version catalog */
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

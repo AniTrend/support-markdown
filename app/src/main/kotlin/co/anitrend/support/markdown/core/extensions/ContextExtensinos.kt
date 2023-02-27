@@ -8,12 +8,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import io.noties.markwon.Markwon
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-fun Context.displayWidth(): Int {
-    val metrics = DisplayMetrics()
-    display?.getRealMetrics(metrics)
-    return metrics.widthPixels
-}
-
 fun AppCompatTextView.setMarkdown(markwon: Markwon, text: String) {
     movementMethod = BetterLinkMovementMethod.newInstance().apply {
         setOnLinkClickListener { textView, url ->

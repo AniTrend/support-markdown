@@ -1,20 +1,20 @@
-package co.anitrend.support.markdown.core.plugin
+package co.anitrend.support.markdown.core.plugin.store
 
+import android.annotation.SuppressLint
 import co.anitrend.support.markdown.sample.R
 import coil.request.Disposable
 import coil.request.ImageRequest
-import coil.size.OriginalSize
-import coil.size.PixelSize
+import coil.size.Size
 import io.noties.markwon.image.AsyncDrawable
-import io.noties.markwon.image.coil.CoilImagesPlugin
 
 /**
  * Taken from anitrend
  */
-internal class CoilStorePlugin private constructor(
+class CoilStorePlugin private constructor(
     private val requestBuilder: ImageRequest.Builder
-) : CoilImagesPlugin.CoilStore {
+) : CoilStore {
 
+    @SuppressLint("NewApi")
     override fun load(drawable: AsyncDrawable): ImageRequest {
         val builder = requestBuilder
             .crossfade(true)
@@ -26,20 +26,15 @@ internal class CoilStorePlugin private constructor(
         val height = drawable.imageSize?.height
 
         val size = if (width?.value != null && height?.value != null) {
-            PixelSize(
+            Size(
                 width = width.value.toInt(),
                 height = height.value.toInt()
             )
-        } else OriginalSize
+        } else Size.ORIGINAL
 
         builder.size(size)
 
         return builder.build()
-    }
-
-    override fun cancel(disposable: Disposable) {
-        if (!disposable.isDisposed)
-            disposable.dispose()
     }
 
     companion object {

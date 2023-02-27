@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import co.anitrend.support.markdown.data.FeedDataSource
 import co.anitrend.support.markdown.domain.entities.TextFeed
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
 import kotlinx.coroutines.flow.Flow
 
 internal class GetFeedTextPagedRepository(

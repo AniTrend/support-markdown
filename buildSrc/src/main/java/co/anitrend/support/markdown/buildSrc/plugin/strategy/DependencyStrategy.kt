@@ -1,48 +1,52 @@
 package co.anitrend.support.markdown.buildSrc.plugin.strategy
 
-import co.anitrend.support.markdown.buildSrc.Libraries
+import co.anitrend.support.markdown.buildSrc.common.isSampleModule
 import co.anitrend.support.markdown.buildSrc.common.sample
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.libs
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.test
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.androidTest
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.implementation
+import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
-internal class DependencyStrategy(
-    private val module: String
-) {
+internal class DependencyStrategy(private val project: Project) {
     private fun DependencyHandler.applyDefaultDependencies() {
-        add("implementation", Libraries.JetBrains.Kotlin.stdlib)
+        implementation(project.libs.jetbrains.kotlin.stdlib.jdk8)
+        implementation(project.libs.jetbrains.kotlin.reflect)
 
-        if (module == sample) {
-            add("implementation", Libraries.Koin.AndroidX.fragment)
-            add("implementation", Libraries.Koin.AndroidX.viewmodel)
-            add("implementation", Libraries.Koin.AndroidX.scope)
-            add("implementation", Libraries.Koin.extension)
-            add("implementation", Libraries.Koin.core)
+        if (project.isSampleModule()) {
+            implementation(project.libs.koin.android)
+            implementation(project.libs.koin.core)
         }
 
-        // Testing libraries
-        add("testImplementation", Libraries.junit)
-        add("testImplementation", Libraries.mockk)
+        // Testing libs
+        test(project.libs.junit)
+        test(project.libs.mockk)
     }
 
     private fun DependencyHandler.applyTestDependencies() {
-        if (module == sample)
-            add("testImplementation", Libraries.Koin.test)
-        add("androidTestImplementation", Libraries.AndroidX.Test.core)
-        add("androidTestImplementation", Libraries.AndroidX.Test.runner)
-        add("androidTestImplementation", Libraries.AndroidX.Test.Espresso.core)
+        if (project.isSampleModule()) {
+            test(project.libs.koin.test)
+            test(project.libs.koin.test.junit4)
+        }
+        androidTest(project.libs.androidx.test.ext.junit.ktx)
+        androidTest(project.libs.androidx.test.core.ktx)
+        androidTest(project.libs.androidx.test.runner)
+        androidTest(project.libs.mockk.android)
     }
 
     private fun DependencyHandler.applyLifeCycleDependencies() {
-        add("implementation", Libraries.AndroidX.Lifecycle.liveDataCoreKtx)
-        add("implementation", Libraries.AndroidX.Lifecycle.viewModelKtx)
-        add("implementation", Libraries.AndroidX.Lifecycle.liveDataKtx)
-        add("implementation", Libraries.AndroidX.Lifecycle.runTimeKtx)
-        add("implementation", Libraries.AndroidX.Lifecycle.extensions)
+        implementation(project.libs.androidx.lifecycle.livedata.core.ktx)
+        implementation(project.libs.androidx.lifecycle.viewmodel.ktx)
+        implementation(project.libs.androidx.lifecycle.livedata.ktx)
+        implementation(project.libs.androidx.lifecycle.runtime.ktx)
+        implementation(project.libs.androidx.lifecycle.extensions)
     }
 
     fun applyDependenciesOn(handler: DependencyHandler) {
         handler.applyDefaultDependencies()
         handler.applyTestDependencies()
-        if (module == sample)
+        if (project.isSampleModule())
             handler.applyLifeCycleDependencies()
     }
 }

@@ -5,6 +5,7 @@ import co.anitrend.support.markdown.buildSrc.common.isSampleModule
 import org.gradle.api.Project
 
 private fun Project.applyModulePlugin() {
+    plugins.apply("com.diffplug.spotless")
     if (isLibraryModule()) {
         plugins.apply("com.android.library")
         plugins.apply("org.jetbrains.dokka")
@@ -19,6 +20,5 @@ internal fun Project.configurePlugins() {
     plugins.apply("kotlin-android")
     if (isSampleModule()) {
         plugins.apply("kotlin-kapt")
-        plugins.apply("com.apollographql.apollo")
     }
 }

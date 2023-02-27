@@ -11,12 +11,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.scope.fragmentScope
-import org.koin.core.scope.KoinScopeComponent
+import org.koin.core.component.KoinScopeComponent
 
 abstract class AbstractFragment<B: ViewBinding>(@LayoutRes layoutId: Int) : Fragment(layoutId),
     CoroutineScope by MainScope(), KoinScopeComponent {
 
-    override val scope by lazy { fragmentScope() }
+    override val scope by fragmentScope()
 
     protected var binding: B? = null
 
@@ -48,27 +48,6 @@ abstract class AbstractFragment<B: ViewBinding>(@LayoutRes layoutId: Int) : Frag
      */
     abstract suspend fun setUpViewModelObserver()
 
-    /**
-     * Called to do initial creation of a fragment.  This is called after
-     * [.onAttach] and before
-     * [.onCreateView].
-     *
-     *
-     * Note that this can be called while the fragment's activity is
-     * still in the process of being created.  As such, you can not rely
-     * on things like the activity's content view hierarchy being initialized
-     * at this point.  If you want to do work once the activity itself is
-     * created, add a [androidx.lifecycle.LifecycleObserver] on the
-     * activity's Lifecycle, removing it when it receives the
-     * [Lifecycle.State.CREATED] callback.
-     *
-     *
-     * Any restored child fragments will be created before the base
-     * `Fragment.onCreate` method returns.
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     * a previous saved state, this is the state.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenResumed {
@@ -77,16 +56,6 @@ abstract class AbstractFragment<B: ViewBinding>(@LayoutRes layoutId: Int) : Frag
         initializeComponents(savedInstanceState)
     }
 
-    /**
-     * Called immediately after [.onCreateView]
-     * has returned, but before any saved state has been restored in to the view.
-     * This gives subclasses a chance to initialize themselves once
-     * they know their view hierarchy has been completely created.  The fragment's
-     * view hierarchy is not however attached to its parent at this point.
-     * @param view The View returned by [.onCreateView].
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModelObserverJob = lifecycleScope.launch {
@@ -94,15 +63,6 @@ abstract class AbstractFragment<B: ViewBinding>(@LayoutRes layoutId: Int) : Frag
         }
     }
 
-    /**
-     * Called when the view previously created by [.onCreateView] has
-     * been detached from the fragment.  The next time the fragment needs
-     * to be displayed, a new view will be created.  This is called
-     * after [.onStop] and before [.onDestroy].  It is called
-     * *regardless* of whether [.onCreateView] returned a
-     * non-null view.  Internally it is called after the view's state has
-     * been saved but before it has been removed from its parent.
-     */
     override fun onDestroyView() {
         viewModelObserverJob?.cancel()
         super.onDestroyView()

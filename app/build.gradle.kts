@@ -1,70 +1,63 @@
-import co.anitrend.support.markdown.buildSrc.Libraries
-import org.gradle.api.artifacts.Configuration
-
 plugins {
     id("co.anitrend.support.markdown")
-    id("koin")
+    id("com.apollographql.apollo3").version("3.7.3")
 }
 
 apollo {
-    // instruct the compiler to generate Kotlin models
-    generateKotlinModels.set(true)
+    packageName.set("co.anitrend.support.markdown.domain.entities")
 }
 
+
 configurations {
-    fun  excludeDefault(configuration: Configuration) {
-        configuration.exclude(
+    fun Configuration.excludeDefault() {
+        exclude(
             mapOf(
                 "group" to "org.jetbrains",
                 "module" to "annotations"
             )
         )
     }
-    println("Configurations available [${configurations.joinToString()}]")
-    getByName("implementation") {
-        excludeDefault(this)
-    }
-    getByName("androidTestImplementation") {
-        excludeDefault(this)
-    }
+    logger.lifecycle("Configurations available [${configurations.joinToString()}]")
+    getByName("implementation") { excludeDefault() }
+    getByName("androidTestImplementation") { excludeDefault() }
 }
 
 dependencies {
     implementation(project(":markdown"))
 
-    implementation(Libraries.Google.Material.material)
+    implementation("com.apollographql.apollo3:apollo-runtime:3.7.3")
 
-    implementation(Libraries.AndroidX.Core.coreKtx)
-    implementation(Libraries.AndroidX.Fragment.fragmentKtx)
-    implementation(Libraries.AndroidX.Activity.activityKtx)
-    implementation(Libraries.AndroidX.ConstraintLayout.constraintLayout)
-    implementation(Libraries.AndroidX.SwipeRefresh.swipeRefreshLayout)
-    implementation(Libraries.AndroidX.Preference.preferenceKtx)
-    implementation(Libraries.AndroidX.Recycler.recyclerView)
+    implementation(libs.google.android.material)
 
-    implementation(Libraries.AndroidX.Paging.common)
-    implementation(Libraries.AndroidX.Paging.runtime)
-    implementation(Libraries.AndroidX.Paging.runtimeKtx)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.constraintlayout)
 
-    implementation(Libraries.Apollo.runtime)
-    implementation(Libraries.Apollo.android)
-    implementation(Libraries.Apollo.coroutines)
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.runtime.ktx)
 
-    implementation(Libraries.Markwon.core)
-    implementation(Libraries.Markwon.html)
-    implementation(Libraries.Markwon.image)
-    implementation(Libraries.Markwon.coil)
-    implementation(Libraries.Markwon.linkify)
-    implementation(Libraries.Markwon.simpleExt)
-    implementation(Libraries.Markwon.Extension.taskList)
-    implementation(Libraries.Markwon.Extension.strikeThrough)
+    implementation(libs.androidx.swipeRefreshLayout)
 
-    implementation(Libraries.JetBrains.Markdown.markdown)
+    implementation(libs.androidx.recyclerView)
 
-    implementation(Libraries.Coil.coil)
-    implementation(Libraries.Coil.video)
-    implementation(Libraries.Coil.svg)
-    implementation(Libraries.Coil.gif)
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.editor)
+    implementation(libs.markwon.html)
+    implementation(libs.markwon.coil)
+    implementation(libs.markwon.parser)
+    implementation(libs.markwon.linkify)
+    implementation(libs.markwon.simple.ext)
+    implementation(libs.markwon.syntax.highlight)
+    implementation(libs.markwon.ext.tasklist)
+    implementation(libs.markwon.ext.strikethrough)
+    implementation(libs.markwon.ext.tables)
 
-    implementation(Libraries.betterLinkMovement)
+    implementation(libs.coil)
+    implementation(libs.coil.video)
+    implementation(libs.coil.svg)
+    implementation(libs.coil.gif)
+
+    implementation(libs.saket.betterlinkmovementmethod)
 }

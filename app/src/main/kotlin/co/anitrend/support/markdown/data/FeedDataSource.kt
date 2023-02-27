@@ -2,11 +2,11 @@ package co.anitrend.support.markdown.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import co.anitrend.support.markdown.domain.entities.FeedListQuery
 import co.anitrend.support.markdown.domain.entities.TextFeed
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,18 +27,18 @@ internal class FeedDataSource(
 
     private fun convert(activities: List<FeedListQuery.Activity?>?): List<TextFeed> {
         val result = activities?.filterNotNull()?.map {
-            val activity = requireNotNull(it.asTextActivity)
+            val activity = requireNotNull(it.onTextActivity)
             TextFeed(
                 id = activity.id,
                 text = activity.text.orEmpty(),
                 createdAt = activity.createdAt.getDateTime(),
                 user = activity.user!!.let { result ->
                     TextFeed.User(
-                        id = result.fragments.user.id,
-                        name = result.fragments.user.name,
+                        id = result.user.id,
+                        name = result.user.name,
                         avatar = TextFeed.User.Avatar(
-                            large = result.fragments.user.avatar?.large,
-                            medium = result.fragments.user.avatar?.medium
+                            large = result.user.avatar?.onUserAvatar?.large,
+                            medium = result.user.avatar?.onUserAvatar?.medium
                         ),
                     )
                 },
@@ -62,31 +62,6 @@ internal class FeedDataSource(
         else position.minus(1)
     }
 
-    /**
-     * Provide a [Key] used for the initial [load] for the next [PagingSource] due to invalidation
-     * of this [PagingSource]. The [Key] is provided to [load] via [LoadParams.key].
-     *
-     * The [Key] returned by this method should cause [load] to load enough items to
-     * fill the viewport around the last accessed position, allowing the next generation to
-     * transparently animate in. The last accessed position can be retrieved via
-     * [state.anchorPosition][PagingState.anchorPosition], which is typically
-     * the top-most or bottom-most item in the viewport due to access being triggered by binding
-     * items as they scroll into view.
-     *
-     * For example, if items are loaded based on integer position keys, you can return
-     * [state.anchorPosition][PagingState.anchorPosition].
-     *
-     * Alternately, if items contain a key used to load, get the key from the item in the page at
-     * index [state.anchorPosition][PagingState.anchorPosition].
-     *
-     * @param state [PagingState] of the currently fetched data, which includes the most recently
-     * accessed position in the list via [PagingState.anchorPosition].
-     *
-     * @return [Key] passed to [load] after invalidation used for initial load of the next
-     * generation. The [Key] returned by [getRefreshKey] should load pages centered around
-     * user's current viewport. If the correct [Key] cannot be determined, `null` can be returned
-     * to allow [load] decide what default key to use.
-     */
     override fun getRefreshKey(state: PagingState<Int, TextFeed>): Int {
         return STARTING_PAGE
     }
@@ -101,14 +76,14 @@ internal class FeedDataSource(
         val filter = FeedListQuery(
             page = position,
             perPage = query.pageSize,
-            asHtml = Input.optional(query.asHtml),
-            hasRepliesOrTypeText = Input.optional(query.hasRepliesOrTypeText),
-            userId = Input.optional(query.userId)
+            asHtml = Optional.present(query.asHtml),
+            hasRepliesOrTypeText = Optional.present(query.hasRepliesOrTypeText),
+            userId = Optional.presentIfNotNull(query.userId)
         )
 
         return try {
             val request = client.query(filter)
-            val response = request.await()
+            val response = request.execute()
             if (response.hasErrors()) {
                 val message = response.errors?.firstOrNull()?.message
                 LoadResult.Error(
@@ -116,7 +91,7 @@ internal class FeedDataSource(
                 )
             }
             else {
-                val page = requireNotNull(response.data?.page)
+                val page = requireNotNull(response.data?.Page)
                 val textFeeds = convert(page.activities)
 
                 val nextKey = createNextKey(textFeeds.size, page.pageInfo)

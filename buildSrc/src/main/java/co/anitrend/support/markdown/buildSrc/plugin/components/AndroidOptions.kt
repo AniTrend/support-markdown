@@ -1,9 +1,9 @@
 package co.anitrend.support.markdown.buildSrc.plugin.components
 
-import co.anitrend.support.markdown.buildSrc.common.Versions
 import co.anitrend.support.markdown.buildSrc.common.isLibraryModule
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.publishingExtension
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.releaseProperties
 import com.android.build.gradle.internal.dsl.BuildType
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
@@ -45,9 +45,9 @@ internal fun Project.configureOptions() {
 
             println("Configuring maven publication options for ${project.path}:maven with component -> ${component?.name}")
             create("maven", MavenPublication::class.java) {
-                groupId = "co.anitrend.query.builder"
+                groupId = "co.anitrend.markdown"
                 artifactId = project.name
-                version = Versions.versionName
+                version = releaseProperties["version"] as? String
 
                 artifact(sourcesJar)
                 artifact("${project.buildDir}/outputs/aar/${project.name}-release.aar")

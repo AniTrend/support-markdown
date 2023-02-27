@@ -6,13 +6,13 @@ import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
-import org.koin.androidx.scope.activityScope
-import org.koin.core.scope.KoinScopeComponent
+import org.koin.androidx.scope.activityRetainedScope
+import org.koin.core.component.KoinScopeComponent
 
 abstract class AbstractActivity<B: ViewBinding> : AppCompatActivity(),
     CoroutineScope by MainScope(), KoinScopeComponent {
 
-    override val scope by lazy { activityScope() }
+    override val scope by activityRetainedScope()
 
     protected var binding: B? = null
 

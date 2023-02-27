@@ -2,8 +2,12 @@ package co.anitrend.support.markdown.buildSrc.plugin.extensions
 
 import com.android.build.gradle.*
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.artifacts.VersionConstraint
 import com.android.build.gradle.api.AndroidBasePlugin
-import com.android.build.gradle.api.BaseVariantOutput
+import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.internal.plugins.DefaultArtifactPublicationSet
 import org.gradle.api.plugins.ExtraPropertiesExtension
@@ -11,10 +15,29 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.SourceSetContainer
+import com.diffplug.gradle.spotless.SpotlessExtension
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jetbrains.kotlin.gradle.testing.internal.KotlinTestsRegistry
+import java.io.File
+import java.util.Properties
+
+internal val Project.releaseProperties: Properties
+    get() {
+        val releaseFile = File(rootDir, "gradle/release.properties")
+        if (!releaseFile.exists()) {
+            logger.error("Release file cannot be found in path: $releaseFile")
+        }
+
+        return Properties(2).apply {
+            load(releaseFile.inputStream())
+        }
+    }
+
+internal val Project.libs: LibrariesForLibs
+    get() = extensions.getByType<LibrariesForLibs>()
 
 internal fun Project.baseExtension() =
     extensions.getByType<BaseExtension>()
@@ -43,9 +66,6 @@ internal fun Project.sourceSetContainer() =
 internal fun Project.javaPluginExtension() =
     extensions.getByType<JavaPluginExtension>()
 
-internal fun Project.variantOutput() =
-    extensions.getByType<BaseVariantOutput>()
-
 internal fun Project.kotlinAndroidProjectExtension() =
     extensions.getByType<KotlinAndroidProjectExtension>()
 
@@ -57,6 +77,9 @@ internal fun Project.androidExtensionsExtension() =
 
 internal fun Project.publishingExtension() =
     extensions.getByType<PublishingExtension>()
+
+internal fun Project.spotlessExtension() =
+    extensions.getByType<SpotlessExtension>()
 
 internal fun Project.containsAndroidPlugin(): Boolean {
     return project.plugins.toList().any { plugin ->

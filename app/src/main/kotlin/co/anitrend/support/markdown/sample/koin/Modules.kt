@@ -4,7 +4,8 @@ import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import co.anitrend.support.markdown.center.CenterPlugin
 import co.anitrend.support.markdown.core.CorePlugin
-import co.anitrend.support.markdown.core.plugin.CoilStorePlugin
+import co.anitrend.support.markdown.core.plugin.CoilImagePlugin
+import co.anitrend.support.markdown.core.plugin.store.CoilStorePlugin
 import co.anitrend.support.markdown.data.koin.dataModules
 import co.anitrend.support.markdown.ephasis.EmphasisPlugin
 import co.anitrend.support.markdown.heading.HeadingPlugin
@@ -22,19 +23,18 @@ import co.anitrend.support.markdown.spoiler.SpoilerPlugin
 import co.anitrend.support.markdown.strike.StrikeThroughPlugin
 import co.anitrend.support.markdown.webm.WebMPlugin
 import co.anitrend.support.markdown.youtube.YouTubePlugin
-import coil.Coil
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.disk.DiskCache
+import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
-import coil.util.CoilUtils
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -74,12 +74,12 @@ private val coreModule = module {
             .usePlugin(TaskListPlugin.create(context))
             .usePlugin(ItalicsPlugin.create())
             .usePlugin(
-                CoilImagesPlugin.create(
+                CoilImagePlugin.create(
                     CoilStorePlugin.create(
                         ImageRequest.Builder(context)
                             .transformations(RoundedCornersTransformation(radius))
                     ),
-                    Coil.imageLoader(context)
+                    context.imageLoader
                 )
             )
             .usePlugin(object : AbstractMarkwonPlugin() {
@@ -117,18 +117,20 @@ private val imageLoaderModule = module {
         val context = androidContext()
         ImageLoader.Builder(context)
             .crossfade(true)
-            .okHttpClient {
-                OkHttpClient.Builder()
-                    .cache(
-                        CoilUtils.createDefaultCache(context)
-                    )
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(context.cacheDir)
                     .build()
             }
-            .componentRegistry {
+            .okHttpClient {
+                OkHttpClient.Builder()
+                    .build()
+            }
+            .components {
                 if (SDK_INT >= 28)
-                    add(ImageDecoderDecoder())
+                    add(ImageDecoderDecoder.Factory())
                 else
-                    add(GifDecoder())
+                    add(GifDecoder.Factory())
             }.build()
     }
 }
