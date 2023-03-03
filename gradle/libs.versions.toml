@@ -22,7 +22,7 @@ jetbrains-kotlinx-coroutines = "1.6.4"
 jetbrains-kotlinx-datetime = "0.4.0"
 jetbrains-kotlinx-serialization = "1.5.0"
 
-koin = "3.1.6"
+koin = "3.3.3"
 koin-android = "3.3.3"
 
 markwon = "4.6.2"
@@ -84,7 +84,7 @@ coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 
 google-android-material = { module = "com.google.android.material:material", version.ref = "google-android-material" }
 
-jetbrains-annotations = { module = "org.jetbrains:annotations", version = "16.0.2" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "16.0.3" }
 jetbrains-dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "jetbrains-dokka" }
 jetbrains-kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "jetbrains-kotlin" }
 jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "jetbrains-kotlin" }
@@ -122,4 +122,4 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 
 saket-betterlinkmovementmethod = { module = "me.saket:better-link-movement-method", version = "2.2.0" }
 
-spotless-gradle = { module = "com.diffplug.spotless:spotless-plugin-gradle", version = "6.15.0" }
+spotless-gradle = { module = "com.diffplug.spotless:spotless-plugin-gradle", version = "6.16.0" }
