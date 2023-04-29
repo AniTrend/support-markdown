@@ -39,7 +39,7 @@ threeTenBp = { module = "com.jakewharton.threetenabp:threetenabp", version = "1.
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 junit = { module = "junit:junit", version = "4.13.2" }
 
-jsoup = { module = "org.jsoup:jsoup", version = "1.15.4" }
+jsoup = { module = "org.jsoup:jsoup", version = "1.16.1" }
 scalingImageView = { module = "com.davemorrissey.labs:subsampling-scale-image-view-androidx", version = "3.10.0" }
 retrofitSerializer = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
 
