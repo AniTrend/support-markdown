@@ -2,6 +2,10 @@ plugins {
 	id("co.anitrend.support.markdown")
 }
 
+android {
+    namespace = "io.wax911.support.markdown"
+}
+
 dependencies {
     implementation(libs.markwon.core)
     implementation(libs.markwon.editor)
