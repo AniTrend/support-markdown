@@ -3,6 +3,10 @@ plugins {
     id("com.apollographql.apollo3").version("3.8.2")
 }
 
+android {
+    namespace = "co.anitrend.support.markdown.sample"
+}
+
 apollo {
     packageName.set("co.anitrend.support.markdown.domain.entities")
 }
