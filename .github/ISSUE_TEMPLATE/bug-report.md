@@ -2,7 +2,7 @@
 title: "[Bug]: "
 name: Bug Report
 about: Report any issues regarding the project and help us identify bugs quicker
-labels: [":bug: bug"]
+labels: ["bug"]
 ---
 
 - type: markdown

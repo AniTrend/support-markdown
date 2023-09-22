@@ -2,7 +2,7 @@
 title: "[Feature]: "
 name: Feature Request
 about: Got a suggestion? Then this is what you should use
-labels: [":star2: enhancement"]
+labels: ["enhancement"]
 ---
 
 - type: markdown
