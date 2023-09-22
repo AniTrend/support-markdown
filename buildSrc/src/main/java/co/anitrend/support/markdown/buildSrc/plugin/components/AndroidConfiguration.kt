@@ -6,7 +6,7 @@ import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseAppExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.libraryExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.libs
-import co.anitrend.support.markdown.buildSrc.plugin.extensions.releaseProperties
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.props
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.spotlessExtension
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
@@ -54,12 +54,12 @@ private fun DefaultConfig.applyAdditionalConfiguration(project: Project) {
 }
 
 internal fun Project.configureAndroid(): Unit = baseExtension().run {
-    compileSdkVersion(Configuration.compileSdk)
+    compileSdkVersion(34)
     defaultConfig {
-        minSdk = Configuration.minSdk
-        targetSdk = Configuration.targetSdk
-        versionCode = releaseProperties["code"] as? Int
-        versionName = releaseProperties["version"] as? String
+        minSdk = 21
+        targetSdk = 34
+        versionCode = props[PropertyTypes.CODE].toInt()
+        versionName = props[PropertyTypes.VERSION]
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         applyAdditionalConfiguration(project)
     }
@@ -67,13 +67,27 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            isShrinkResources = false
             isTestCoverageEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt"
+                ),
+                "proguard-rules.pro"
+            )
         }
 
         getByName("debug") {
+            isDebuggable = true
             isMinifyEnabled = false
+            isShrinkResources = false
             isTestCoverageEnabled = true
+            proguardFiles(
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt"
+                ),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -105,12 +119,13 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
     }
 
     tasks.withType(KotlinCompile::class.java) {
+        val compilerArgumentOptions = emptyList<String>()
+
         kotlinOptions {
             allWarningsAsErrors = false
             kotlinOptions {
                 allWarningsAsErrors = false
-                // Filter out modules that won't be using coroutines
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.Experimental")
+                freeCompilerArgs = compilerArgumentOptions
             }
         }
     }
