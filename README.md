@@ -1,4 +1,4 @@
-# [ :biohazard: WIP :biohazard: ] Support Markdown Library &nbsp; [![Build Status](https://www.travis-ci.com/AniTrend/support-markdown.svg?branch=main)](https://www.travis-ci.com/AniTrend/support-markdown) &nbsp; [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2bcc9217df74403a9d4afd8664b20c34)](https://www.codacy.com/gh/AniTrend/support-markdown/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AniTrend/support-markdown&amp;utm_campaign=Badge_Grade) &nbsp; [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown?ref=badge_shield) &nbsp; [![](https://jitpack.io/v/AniTrend/support-markdown.svg)](https://jitpack.io/#AniTrend/support-markdown)
+# [ :biohazard: WIP :biohazard: ] Support Markdown Library &nbsp; [![android-unit-test](https://github.com/AniTrend/support-markdown/actions/workflows/android-test.yml/badge.svg)](https://github.com/AniTrend/support-markdown/actions/workflows/android-test.yml) &nbsp; [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2bcc9217df74403a9d4afd8664b20c34)](https://www.codacy.com/gh/AniTrend/support-markdown/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AniTrend/support-markdown&amp;utm_campaign=Badge_Grade) &nbsp; [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FAniTrend%2Fsupport-markdown?ref=badge_shield) &nbsp; [![](https://jitpack.io/v/AniTrend/support-markdown.svg)](https://jitpack.io/#AniTrend/support-markdown)
 
 
 A markdown parse for android which uses the AniList [markdown spec](https://files.kiniro.uk/anilist-flavored-markdown-v1.md), and powered by [Markwon](https://noties.github.io/Markwon/)
@@ -32,20 +32,17 @@ dependencies {
 ## License
 
 ```
-GNU GENERAL PUBLIC LICENSE Version 3
+   Copyright 2018 AniTrend
 
-Copyright (C) 2018 AniTrend
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+       http://www.apache.org/licenses/LICENSE-2.0
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 ```
