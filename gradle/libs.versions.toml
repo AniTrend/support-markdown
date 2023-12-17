@@ -14,7 +14,7 @@ androidx-test-ext = "1.1.5"
 
 coil = "2.5.0"
 
-google-android-material = "1.10.0"
+google-android-material = "1.11.0"
 
 jetbrains-dokka = "1.9.10"
 jetbrains-kotlin = "1.9.21"
