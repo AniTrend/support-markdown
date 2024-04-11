@@ -1,6 +1,5 @@
 package co.anitrend.support.markdown.buildSrc.plugin.components
 
-import co.anitrend.support.markdown.buildSrc.common.Configuration
 import co.anitrend.support.markdown.buildSrc.common.isSampleModule
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseAppExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.baseExtension
@@ -27,7 +26,7 @@ internal fun Project.configureSpotless(): Unit = spotlessExtension().run {
     kotlin {
         target("**/*.kt")
         targetExclude(
-            "$buildDir/**/*.kt",
+            "${layout.buildDirectory}/**/*.kt",
             "**/androidTest/**/*.kt",
             "**/test/**/*.kt",
             "bin/**/*.kt"
