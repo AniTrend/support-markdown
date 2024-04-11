@@ -24,4 +24,4 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4.5.0
       with:
         branch: docs # The branch the action should deploy to.
-        folder: dokka-docs # The folder the action should deploy.
+        folder: markdown/build/dokka/html # The folder the action should deploy.
