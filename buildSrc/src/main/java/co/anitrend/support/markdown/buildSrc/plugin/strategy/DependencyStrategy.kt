@@ -1,7 +1,6 @@
 package co.anitrend.support.markdown.buildSrc.plugin.strategy
 
 import co.anitrend.support.markdown.buildSrc.common.isSampleModule
-import co.anitrend.support.markdown.buildSrc.common.sample
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.libs
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.test
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.androidTest
