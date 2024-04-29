@@ -1,6 +1,6 @@
 plugins {
     id("co.anitrend.support.markdown")
-    id("com.apollographql.apollo3").version("3.8.3")
+    id("com.apollographql.apollo3").version("3.8.4")
 }
 
 android {
