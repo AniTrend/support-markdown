@@ -72,7 +72,7 @@ androidx-recyclerView = { module = "androidx.recyclerview:recyclerview", version
 
 androidx-test-core-ktx =  { module = "androidx.test:core-ktx", version = "1.6.0" }
 androidx-test-runner = { module = "androidx.test:runner", version = "1.5.2" }
-androidx-test-rules = { module = "androidx.test:rules", version = "1.5.0" }
+androidx-test-rules = { module = "androidx.test:rules", version = "1.6.0" }
 androidx-test-ext-junit-ktx =  { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext" }
 
 
