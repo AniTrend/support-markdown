@@ -29,7 +29,7 @@ configurations {
 dependencies {
     implementation(project(":markdown"))
 
-    implementation("com.apollographql.apollo3:apollo-runtime:3.8.4")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.5")
 
     implementation(libs.google.android.material)
 
