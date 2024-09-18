@@ -64,7 +64,7 @@ androidx-paging-common = { module = "androidx.paging:paging-common-ktx", version
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "androidx-paging" }
 androidx-paging-runtime-ktx =  { module = "androidx.paging:paging-runtime-ktx", version.ref = "androidx-paging" }
 
-androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
+androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version = "1.2.0" }
 
 androidx-swipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version = "1.2.0-alpha01" }
 
