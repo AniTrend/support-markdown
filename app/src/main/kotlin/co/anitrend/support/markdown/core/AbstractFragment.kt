@@ -10,11 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.core.component.KoinScopeComponent
 
 abstract class AbstractFragment<B: ViewBinding>(@LayoutRes layoutId: Int) : Fragment(layoutId),
-    CoroutineScope by MainScope(), KoinScopeComponent {
+    CoroutineScope by MainScope(), AndroidScopeComponent {
 
     override val scope by fragmentScope()
 
