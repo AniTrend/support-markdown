@@ -1,6 +1,3 @@
-import org.gradle.accessors.dm.LibrariesForLibs
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
-
 plugins {
     `kotlin-dsl`
     `maven-publish`

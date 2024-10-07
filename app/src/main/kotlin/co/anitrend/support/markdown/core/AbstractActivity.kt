@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 import org.koin.androidx.scope.activityRetainedScope
 import org.koin.core.component.KoinScopeComponent
 
 abstract class AbstractActivity<B: ViewBinding> : AppCompatActivity(),
-    CoroutineScope by MainScope(), KoinScopeComponent {
+    CoroutineScope by MainScope(), AndroidScopeComponent {
 
     override val scope by activityRetainedScope()
 
