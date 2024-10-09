@@ -27,7 +27,7 @@ koin-android = "4.0.0"
 
 markwon = "4.6.2"
 
-mockk = "1.13.12"
+mockk = "1.13.13"
 
 
 [plugins]
