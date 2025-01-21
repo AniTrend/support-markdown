@@ -23,7 +23,7 @@ jetbrains-kotlinx-datetime = "0.6.1"
 jetbrains-kotlinx-serialization = "1.8.0"
 
 koin = "4.0.2"
-koin-android = "4.0.1"
+koin-android = "4.0.2"
 
 markwon = "4.6.2"
 
