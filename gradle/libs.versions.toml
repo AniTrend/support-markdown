@@ -49,7 +49,7 @@ androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref
 
 androidx-core-ktx =  { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 
-androidx-constraintlayout =  { module = "androidx.constraintlayout:constraintlayout", version = "2.2.0" }
+androidx-constraintlayout =  { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-fragment-test = { module = "androidx.fragment:fragment-testing", version.ref = "androidx-fragment" }
