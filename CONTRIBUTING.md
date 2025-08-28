@@ -71,7 +71,7 @@ This repository includes customizations for GitHub Copilot to improve developmen
 - **Chat modes** are available under `.github/chatmodes/` and provide specialized AI assistance for different development tasks
 - **Prompts** are located in `.github/prompts/` and offer reusable templates for common tasks
 - Use the **conventional commit prompt** (`/conventional-commit`) to generate properly formatted commit messages following our convention
-- When using conventional commits, keep scopes generic (e.g., `feat:`, `fix:`, `docs:`) rather than module-specific
+- When using conventional commits, keep scopes generic. For example, use scopes like `core`, `api`, or `docs` (e.g., `feat(core): ...`, `fix(api): ...`) rather than module-specific scopes such as `parser`, `markdown-renderer`, or `file-uploader` (e.g., `feat(parser): ...`). This helps keep commit history organized and easier to understand.
 
 ### Repository-specific instructions
 - Instructions under `.github/instructions/` help Copilot Chat understand the project context and architecture
