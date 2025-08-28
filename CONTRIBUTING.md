@@ -63,5 +63,23 @@ This Code of Conduct is adapted from the [Contributor Covenant][homepage], versi
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
 
+## GitHub Copilot customization
+
+This repository includes customizations for GitHub Copilot to improve development experience:
+
+### Chat modes and prompts
+- **Chat modes** are available under `.github/chatmodes/` and provide specialized AI assistance for different development tasks
+- **Prompts** are located in `.github/prompts/` and offer reusable templates for common tasks
+- Use the **conventional commit prompt** (`/conventional-commit`) to generate properly formatted commit messages following our convention
+- When using conventional commits, keep scopes generic. For example, use scopes like `core`, `api`, or `docs` (e.g., `feat(core): ...`, `fix(api): ...`) rather than module-specific scopes such as `parser`, `markdown-renderer`, or `file-uploader` (e.g., `feat(parser): ...`). This helps keep commit history organized and easier to understand.
+
+### Repository-specific instructions
+- Instructions under `.github/instructions/` help Copilot Chat understand the project context and architecture
+- These provide contextual information about the support-markdown library structure and patterns
+- The instructions influence Copilot responses to be more relevant to this specific codebase
+
+### Documentation
+- Full API documentation is available at: https://anitrend.github.io/support-markdown/
+- Refer to the documentation when working with the library's public APIs
 
 Thank you for your contribution!
