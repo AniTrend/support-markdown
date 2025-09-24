@@ -31,7 +31,7 @@ mockk = "1.14.5"
 
 
 [plugins]
-gradle-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
+gradle-versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 
 
 [libraries]
