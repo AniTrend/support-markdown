@@ -10,8 +10,7 @@ import co.anitrend.support.markdown.buildSrc.plugin.extensions.spotlessExtension
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.io.File
 
 private fun Project.configureLint() = libraryExtension().run {
@@ -115,21 +114,9 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    tasks.withType(KotlinCompile::class.java) {
-        val compilerArgumentOptions = emptyList<String>()
-
-        kotlinOptions {
-            allWarningsAsErrors = false
-            kotlinOptions {
-                allWarningsAsErrors = false
-                freeCompilerArgs = compilerArgumentOptions
-            }
-        }
-    }
-
-    tasks.withType(KotlinJvmCompile::class.java) {
-        kotlinOptions {
-            jvmTarget = "17"
+    tasks.withType(KotlinCompilationTask::class.java).configureEach {
+        compilerOptions {
+            allWarningsAsErrors.set(false)
         }
     }
 }
