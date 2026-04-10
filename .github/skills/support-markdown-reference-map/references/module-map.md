@@ -6,9 +6,19 @@ Use this map to place code before searching for a specific file.
 
 | Module | Depends on | Use for | Dokka |
 | --- | --- | --- | --- |
-| `:markdown` | Markwon, Coil, BetterLinkMovementMethod (external only) | All markdown parsing and rendering plugins | `https://anitrend.github.io/support-markdown/` |
+| `:markdown` | Markwon core/html/inline-parser/linkify/simple-ext/ext-tasklist/ext-strikethrough/ext-tables/syntax-highlight, Coil, BetterLinkMovementMethod, commonmark-java via Markwon | All markdown parsing and rendering plugins | `https://anitrend.github.io/support-markdown/` |
 | `:app` | `:markdown` | Sample app only — not published, not a dependency target | n/a |
 | `buildSrc` | build tooling only | Shared Gradle conventions, Android defaults, publishing | n/a |
+
+## Dependency Layers
+
+| Layer | Primary APIs | Use when |
+| --- | --- | --- |
+| Pre-parse rewrite | `AbstractMarkwonPlugin.processMarkdown` | Raw text can be normalized before parsing |
+| Parser and AST | `AbstractMarkwonPlugin.configureParser`, commonmark-java extensions | Syntax should be recognized structurally, not by ad-hoc string replacement |
+| HTML bridge | `HtmlPlugin`, custom tag handlers | Markdown input carries HTML tags that need support or customization |
+| Render and spans | `MarkwonVisitor.Builder`, `MarkwonSpansFactory.Builder` | Parsed nodes need custom rendering |
+| View handoff | `beforeSetText` | Final `TextView` cleanup or scheduling concerns |
 
 ## Plugin Packages In `:markdown`
 
@@ -44,5 +54,6 @@ All plugin code lives under `co.anitrend.support.markdown` in `markdown/src/main
 
 - Consumers typically import `CorePlugin` or individual plugin classes and configure them via the `Markwon.builder()` API.
 - `OnMentionTextAddedListener` is the primary extension point for apps that handle `@mention` text.
+- Markwon plugin hooks ultimately sit on top of commonmark-java parsing, so parser decisions are separate from package-placement decisions.
 - Favor documenting external extension points clearly because downstream apps configure and extend these plugins at runtime.
 - If a change affects a public type, assume the Dokka page is part of the deliverable.
