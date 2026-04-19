@@ -74,3 +74,4 @@ The project uses conventional commits with generic scopes:
 - HTML tag handling: `html/`.
 - Prefer shared build logic changes in `buildSrc` over duplicating Gradle configuration in individual module build files.
 - When running Gradle locally, use the `jenv-gradle-low-ram` skill to align Java versions and avoid memory pressure.
+- For questions about Markwon plugin hooks, the commonmark-java AST, Android span types, or the `processMarkdown` vs `configureParser` vs `configureVisitor` decision, use the `support-markdown-markwon-internals` skill.

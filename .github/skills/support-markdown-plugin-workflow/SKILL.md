@@ -47,3 +47,4 @@ argument-hint: "Describe the plugin, syntax, or markdown behavior you need to im
 - [dependency stack](./references/dependency-stack.md)
 - [FeedList curl workflow](./references/feedlist-curl.md)
 - [test scenario matrix](./references/test-scenarios.md)
+- AniList syntax rules and plugin mapping → `support-markdown-markwon-internals` skill → `references/anilist-markdown-spec.md`
