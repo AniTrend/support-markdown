@@ -7,6 +7,7 @@ import co.anitrend.support.markdown.buildSrc.plugin.extensions.libraryExtension
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.libs
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.props
 import co.anitrend.support.markdown.buildSrc.plugin.extensions.spotlessExtension
+import co.anitrend.support.markdown.buildSrc.plugin.extensions.kotlinAndroidProjectExtension
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -111,8 +112,8 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType(KotlinCompile::class.java) {
@@ -127,9 +128,7 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
         }
     }
 
-    tasks.withType(KotlinJvmCompile::class.java) {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
+    kotlinAndroidProjectExtension().run {
+        jvmToolchain(21)
     }
 }
