@@ -21,7 +21,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Generate docs with dokka
-      run: ./gradlew dokkaGenerateHtml
+      run: ./gradlew dokkaHtml
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@v4.8.0
       with:
