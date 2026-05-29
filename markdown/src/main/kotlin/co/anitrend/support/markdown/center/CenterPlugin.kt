@@ -9,7 +9,9 @@ import org.commonmark.parser.Parser
 class CenterPlugin private constructor() : AbstractMarkwonPlugin() {
 
     override fun processMarkdown(markdown: String): String {
-        return markdown.replace("~~~", "+++")
+        return TILDE_CENTER_PATTERN.replace(markdown) { matchResult ->
+            "+++${matchResult.groupValues[1]}+++"
+        }
     }
 
     override fun configureParser(builder: Parser.Builder) {
@@ -29,6 +31,8 @@ class CenterPlugin private constructor() : AbstractMarkwonPlugin() {
     }
 
     companion object {
+        private val TILDE_CENTER_PATTERN = Regex("~~~([^\\n]+?)~~~")
+
         fun create() = CenterPlugin()
     }
 }

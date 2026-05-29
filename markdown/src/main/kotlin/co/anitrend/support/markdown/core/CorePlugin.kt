@@ -1,6 +1,5 @@
 package co.anitrend.support.markdown.core
 
-import android.util.Log
 import co.anitrend.support.markdown.common.TildeDelimiterProcessor
 import co.anitrend.support.markdown.html.AlignTagHandler
 import co.anitrend.support.markdown.html.CenterTagHandler
@@ -8,9 +7,7 @@ import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.core.MarkwonTheme
-import io.noties.markwon.html.HtmlEmptyTagReplacement
 import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.html.HtmlTag
 import org.commonmark.node.SoftLineBreak
 import org.commonmark.parser.Parser
 
@@ -38,22 +35,6 @@ class CorePlugin private constructor(
             html.addHandler(AlignTagHandler())
             html.addHandler(CenterTagHandler())
             html.allowNonClosedTags(autoCloseTags)
-            html.emptyTagReplacement(
-                object : HtmlEmptyTagReplacement() {
-                    override fun replace(tag: HtmlTag): String? {
-                        Log.i("CorePlugin","Empty tag $tag")
-                        when {
-                            tag.isBlock -> {
-                                val block = tag.asBlock
-                                if (block.parent()?.isBlock == true && block.parent()?.isClosed == false) {
-                                    val parent = block.parent()
-                                }
-                            }
-                        }
-                        return super.replace(tag)
-                    }
-                }
-            )
         }
     }
 

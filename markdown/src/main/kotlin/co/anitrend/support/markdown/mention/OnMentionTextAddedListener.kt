@@ -47,11 +47,13 @@ class OnMentionTextAddedListener private constructor(
         matches.forEach { matchResult ->
             val content = controller.getContent(matchResult)
             val url = controller.asUserUrl(content)
-            val matchRange = matchResult.range
+            val mentionRange = matchResult.groups[MentionTextAddedController.GROUP_MENTION]
+                ?.range
+                ?: return@forEach
             visitor.setLinkSpan(
                 url,
-                start + matchRange.first,
-                start + matchRange.last + 1
+                start + mentionRange.first - 1,
+                start + mentionRange.last + 1
             )
         }
     }

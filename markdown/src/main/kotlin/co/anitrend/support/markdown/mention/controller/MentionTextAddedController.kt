@@ -20,6 +20,7 @@ internal class MentionTextAddedController {
 
     companion object {
         private const val SITE_URL = "https://anilist.co"
+        const val GROUP_MENTION = 2
         const val PATTERN_MENTION = "(^|>| )@([A-Za-z0-9]+)"
     }
 }
