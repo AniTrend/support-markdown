@@ -9,7 +9,6 @@ import org.gradle.api.artifacts.VersionConstraint
 import com.android.build.gradle.api.AndroidBasePlugin
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import org.gradle.api.internal.plugins.DefaultArtifactPublicationSet
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.publish.PublishingExtension
@@ -43,9 +42,6 @@ internal fun Project.dynamicFeatureExtension() =
 
 internal fun Project.extraPropertiesExtension() =
     extensions.getByType<ExtraPropertiesExtension>()
-
-internal fun Project.defaultArtifactPublicationSet() =
-    extensions.getByType<DefaultArtifactPublicationSet>()
 
 internal fun Project.reportingExtension() =
     extensions.getByType<ReportingExtension>()

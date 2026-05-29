@@ -79,7 +79,12 @@ private inline fun DependencyHandler.add(
  */
 @Suppress("UNCHECKED_CAST")
 fun <T : ModuleDependency> T.exclude(group: String? = null, module: String? = null): T =
-    exclude(mapOf("group" to group, "module" to module)) as T
+    exclude(
+        listOfNotNull(
+            group?.let { "group" to it },
+            module?.let { "module" to it }
+        ).toMap()
+    ) as T
 
 private fun DependencyHandler.addDependency(
     dependencyNotation: Any,

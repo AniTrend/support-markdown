@@ -1,6 +1,6 @@
 plugins {
     id("co.anitrend.support.markdown")
-    id("com.apollographql.apollo3").version("3.8.6")
+    id("com.apollographql.apollo3").version("4.0.0-beta.2")
 }
 
 android {
@@ -8,7 +8,7 @@ android {
 }
 
 apollo {
-    packageName.set("co.anitrend.support.markdown.domain.entities")
+    // package name is auto-detected in Apollo 4.x
 }
 
 
@@ -29,7 +29,7 @@ configurations {
 dependencies {
     implementation(project(":markdown"))
 
-    implementation("com.apollographql.apollo3:apollo-runtime:3.8.6")
+    implementation("com.apollographql.apollo3:apollo-runtime:4.0.0-beta.2")
 
     implementation(libs.google.android.material)
 

@@ -5,8 +5,8 @@ import androidx.paging.PagingState
 import co.anitrend.support.markdown.domain.entities.FeedListQuery
 import co.anitrend.support.markdown.domain.entities.TextFeed
 import co.anitrend.support.markdown.domain.model.TextFeedQuery
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Optional
 import java.text.SimpleDateFormat
 import java.util.*
 
