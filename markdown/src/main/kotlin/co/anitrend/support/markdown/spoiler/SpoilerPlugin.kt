@@ -9,6 +9,16 @@ import co.anitrend.support.markdown.spoiler.span.SpoilerSpan
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonVisitor
 
+/**
+ * Renders `~!spoiler!~` syntax as click-to-reveal spoiler text.
+ *
+ * - [TildeDelimiterProcessor] (registered in [CorePlugin.configureParser]) parses
+ *   `~!...!~` into [SpoilerNode] AST nodes.
+ * - [configureVisitor] applies three spans to spoiler content:
+ *   - [SpoilerSpan] — toggles between hidden (colored overlay) and revealed (tinted) state
+ *   - [SpoilerClickableSpan] — reveals the spoiler on tap
+ *   - [SpoilerHideSpan] — hides the text by making it transparent when not revealed
+ */
 class SpoilerPlugin private constructor(
     @ColorInt private val textColor: Int,
     @ColorInt private val backgroundColor: Int

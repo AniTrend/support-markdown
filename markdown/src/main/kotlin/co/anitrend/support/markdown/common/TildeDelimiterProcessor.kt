@@ -8,12 +8,23 @@ import org.commonmark.node.Text
 import org.commonmark.parser.delimiter.DelimiterProcessor
 import org.commonmark.parser.delimiter.DelimiterRun
 
+/**
+ * Shared `~` delimiter processor that dispatches to three distinct AST nodes based on run length:
+ *
+ * - Length 1: spoiler (`~!...!~`) via [handleSpoiler] — requires leading `!` and trailing `!`
+ * - Length 2: strikethrough (`~~...~~`) via [handleStrikethrough]
+ * - Length 3: center (`~~~...~~~`) via [handleCenter] (note: block-level `~~~` is consumed
+ *   by fenced-code parsing; inline center is bridged to `+++` by [CenterPlugin.processMarkdown])
+ *
+ * Registered once in [CorePlugin.configureParser] and shared by all consuming plugins.
+ */
 internal class TildeDelimiterProcessor : DelimiterProcessor {
 
     override fun getOpeningCharacter(): Char = '~'
     override fun getClosingCharacter(): Char = '~'
     override fun getMinLength(): Int = 1
 
+    /** Returns the run length when opening and closing counts match (1, 2, or 3), else 0. */
     override fun getDelimiterUse(openingRun: DelimiterRun, closingRun: DelimiterRun): Int {
         val openingLen = openingRun.length()
         val closingLen = closingRun.length()

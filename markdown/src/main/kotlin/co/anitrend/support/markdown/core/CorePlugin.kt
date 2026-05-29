@@ -11,6 +11,14 @@ import io.noties.markwon.html.HtmlPlugin
 import org.commonmark.node.SoftLineBreak
 import org.commonmark.parser.Parser
 
+/**
+ * Core plugin that wires together the shared markdown infrastructure.
+ *
+ * - Registers [TildeDelimiterProcessor] (shared `~` parser for spoiler/strikethrough/center)
+ * - Registers [AlignTagHandler] and [CenterTagHandler] on [HtmlPlugin] for HTML alignment tags
+ * - Handles [SoftLineBreak] with a newline in the rendered output
+ * - Disables heading break height in the theme
+ */
 class CorePlugin private constructor(
     private val autoCloseTags: Boolean
 ): AbstractMarkwonPlugin() {
@@ -39,6 +47,9 @@ class CorePlugin private constructor(
     }
 
     companion object {
+        /**
+         * @param autoCloseTags whether to allow non-closed HTML tags (default true)
+         */
         fun create(
             autoCloseTags: Boolean = true,
         ) = CorePlugin(autoCloseTags)

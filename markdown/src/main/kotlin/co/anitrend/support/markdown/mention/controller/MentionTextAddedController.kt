@@ -1,5 +1,9 @@
 package co.anitrend.support.markdown.mention.controller
 
+/**
+ * Controller that finds `@username` mentions in text using a compiled regex
+ * and provides URL construction for the AniList profile.
+ */
 internal class MentionTextAddedController {
 
     private val regex = Regex(

@@ -8,6 +8,10 @@ import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.TagHandler
 
+/**
+ * Handles the HTML `<center>` tag by rendering its children and applying
+ * [AlignmentSpan.Standard] with [Layout.Alignment.ALIGN_CENTER] over the full tag range.
+ */
 class CenterTagHandler : TagHandler() {
 
     override fun handle(

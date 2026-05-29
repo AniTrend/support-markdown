@@ -2,6 +2,12 @@ package co.anitrend.support.markdown.webm
 
 import io.noties.markwon.AbstractMarkwonPlugin
 
+/**
+ * Handles AniList's `webm(URL)` custom syntax for video embeds.
+ *
+ * Converts the syntax to an `<a>` tag linking to the video with a poster thumbnail
+ * during [processMarkdown], relying on HtmlPlugin for rendering.
+ */
 class WebMPlugin private constructor() : AbstractMarkwonPlugin() {
 
     private val regex = Regex(

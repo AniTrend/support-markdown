@@ -4,6 +4,12 @@ import androidx.annotation.VisibleForTesting
 import io.noties.markwon.AbstractMarkwonPlugin
 import java.lang.reflect.Modifier
 
+/**
+ * Handles AniList's `youtube(ID-or-URL)` custom syntax for YouTube embeds.
+ *
+ * During [processMarkdown] the syntax is replaced with an `<a>` tag linking to the
+ * video, displaying a YouTube thumbnail image. Relies on HtmlPlugin for rendering.
+ */
 class YouTubePlugin private constructor() : AbstractMarkwonPlugin() {
 
     private val regex = Regex(

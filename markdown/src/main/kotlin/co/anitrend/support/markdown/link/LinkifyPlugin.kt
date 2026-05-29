@@ -2,6 +2,13 @@ package co.anitrend.support.markdown.link
 
 import io.noties.markwon.AbstractMarkwonPlugin
 
+/**
+ * Auto-links bare URLs in markdown text by wrapping them in `<a href="...">...</a>` tags
+ * during [processMarkdown].
+ *
+ * Handles `http`, `https`, and `ftp` protocols. Used internally as a string-level
+ * bridge within the HtmlPlugin pipeline.
+ */
 internal class LinkifyPlugin private constructor() : AbstractMarkwonPlugin() {
 
     private val regex = Regex(PATTERN_LINK)

@@ -5,6 +5,12 @@ import android.text.style.ClickableSpan
 import android.view.View
 import androidx.annotation.ColorInt
 
+/**
+ * Clickable span that reveals spoiler content on tap.
+ *
+ * Sets [SpoilerSpan.isShown] to `true` and invalidates the view so
+ * the spoiler transitions to its revealed visual state.
+ */
 class SpoilerClickableSpan(
     private val spoilerSpan: SpoilerSpan
 ) : ClickableSpan() {

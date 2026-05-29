@@ -6,6 +6,15 @@ import io.noties.markwon.image.ImageProps
 import io.noties.markwon.image.ImageSize
 import org.commonmark.node.Image
 
+/**
+ * Handles AniList's custom `imgSIZE(URL)` image syntax.
+ *
+ * Works via two mechanisms:
+ * - [configure] registers a [CorePlugin.OnTextAddedListener] that uses Markwon's
+ *   [ImageProps] and [SpanFactory] pipeline for proper span-based rendering.
+ * - [processMarkdown] provides an HtmlPlugin fallback by replacing the custom syntax
+ *   with `<img>` HTML tags for contexts that bypass the AST.
+ */
 class ImagePlugin private constructor() : AbstractMarkwonPlugin() {
 
     private val regex = Regex(

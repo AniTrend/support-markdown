@@ -5,6 +5,12 @@ import android.text.style.CharacterStyle
 import androidx.annotation.ColorInt
 import io.noties.markwon.utils.ColorUtils
 
+/**
+ * Character style that controls spoiler visibility.
+ *
+ * When [isShown] is `false` the text is hidden behind a colored background.
+ * When revealed (`true`) the background shifts to a light tint of the text color.
+ */
 class SpoilerSpan(
     @ColorInt private val textColor: Int,
     @ColorInt private val backgroundColor: Int
