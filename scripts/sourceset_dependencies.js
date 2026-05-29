@@ -1,1 +1,1 @@
-sourceset_dependencies='{":markdown/main":[],":markdown/release":[]}'
+sourceset_dependencies='{":markdown/release":[]}'
