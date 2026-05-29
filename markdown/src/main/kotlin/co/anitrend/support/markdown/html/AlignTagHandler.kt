@@ -7,6 +7,14 @@ import io.noties.markwon.RenderProps
 import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.tag.SimpleTagHandler
 
+/**
+ * Handles the custom `<align>` HTML tag for block-alignment in markdown output.
+ *
+ * Supports three alignment attributes:
+ * - `center` → [Layout.Alignment.ALIGN_CENTER]
+ * - `end` → [Layout.Alignment.ALIGN_OPPOSITE]
+ * - default (no recognized attribute) → [Layout.Alignment.ALIGN_NORMAL]
+ */
 class AlignTagHandler : SimpleTagHandler() {
 
     override fun getSpans(

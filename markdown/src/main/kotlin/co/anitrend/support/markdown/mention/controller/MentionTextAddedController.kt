@@ -1,17 +1,21 @@
 package co.anitrend.support.markdown.mention.controller
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.common.controller.MarkdownPluginController
+/**
+ * Controller that finds `@username` mentions in text using a compiled regex
+ * and provides URL construction for the AniList profile.
+ */
+internal class MentionTextAddedController {
 
-internal class MentionTextAddedController(
-    override val regex: Regex = Regex(
+    private val regex = Regex(
         PATTERN_MENTION,
         RegexOption.MULTILINE
     )
-) : MarkdownPluginController() {
+
+    fun findAllMatches(text: String, startIndex: Int = 0): Sequence<MatchResult> =
+        regex.findAll(text, startIndex)
 
     fun asUserUrl(value: String): String {
-        return "${IMarkdownPlugin.SITE_URL}/user/$value"
+        return "${SITE_URL}/user/$value"
     }
 
     fun getContent(matchResult: MatchResult): String {
@@ -19,6 +23,8 @@ internal class MentionTextAddedController(
     }
 
     companion object {
+        private const val SITE_URL = "https://anilist.co"
+        const val GROUP_MENTION = 2
         const val PATTERN_MENTION = "(^|>| )@([A-Za-z0-9]+)"
     }
 }

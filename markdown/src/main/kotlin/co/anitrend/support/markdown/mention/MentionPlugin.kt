@@ -5,31 +5,23 @@ import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.CorePlugin
 
-class MentionPlugin private constructor(): AbstractMarkwonPlugin() {
+/**
+ * Handles `@username` mentions by converting them to profile links.
+ *
+ * Uses [CorePlugin.addOnTextAddedListener] to intercept text nodes during
+ * Markwon's visitor walk and apply a [Link] span pointing to the user's
+ * AniList profile page.
+ */
+class MentionPlugin private constructor() : AbstractMarkwonPlugin() {
 
     private val controller = MentionTextAddedController()
 
     override fun configure(registry: MarkwonPlugin.Registry) {
-        // wont work for AL mixed content style
-        //registry.require(CorePlugin::class.java) { core ->
-        //    core.addOnTextAddedListener(
-        //        OnMentionTextAddedListener.create(controller)
-        //    )
-        //}
-    }
-
-    override fun processMarkdown(markdown: String): String {
-        var replacement = markdown
-        val matches = controller.findAllMatches(markdown)
-        matches.forEach { matchResult ->
-            val content = controller.getContent(matchResult)
-            val url = controller.asUserUrl(content)
-            replacement = replacement.replace(
-                matchResult.value.trim(),
-                """<a href="$url">@$content</a>"""
+        registry.require(CorePlugin::class.java) { core ->
+            core.addOnTextAddedListener(
+                OnMentionTextAddedListener.create(controller)
             )
         }
-        return replacement
     }
 
     companion object {

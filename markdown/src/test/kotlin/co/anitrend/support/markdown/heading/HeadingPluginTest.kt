@@ -1,104 +1,43 @@
 package co.anitrend.support.markdown.heading
 
-import co.anitrend.support.markdown.ICoreRegexTest
+import org.commonmark.node.Heading
+import org.commonmark.parser.Parser
 import org.junit.Assert.*
 import org.junit.Test
 
-class HeadingPluginTest : ICoreRegexTest {
-    override val plugin by lazy {
-        HeadingPlugin.create()
+class HeadingPluginTest {
+
+    private val parser by lazy {
+        Parser.builder().build()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `setext headings are parsed by commonmark-java`() {
         val testCase = """
             Hello this is a title
             ===
 
             this is also another title
             ---
-
-            ---
-            what about this?
-            *****
-
-            Make sure to have a blank line either side to avoid ambiguity: 
-            this is a header
-            - - - - - - - - - - - - - - 
-
-            this is text followed by a horizontal line
-            _ _ _ _
-
-            Nanikore *** wiykd akhf k kajfhl safh
-            ___
-            skjadlkjfweafs lasdkfewa
-
-
-            ***
-
-            Make sure to have a blank line either side to avoid ambiguity: 
-            this is a header
-            ---
-            this is text followed by a horizontal line
-            ---
-
-            Alternatively, you can use the <hr> HTML tag. 
-        """.trimIndent()
-        val testCaseExpected = """
-            <h1>Hello this is a title</h1>
-
-            <h1>this is also another title</h1>
-
-            ---
-            what about this?
-            *****
-
-            Make sure to have a blank line either side to avoid ambiguity: 
-            this is a header
-            - - - - - - - - - - - - - - 
-
-            this is text followed by a horizontal line
-            _ _ _ _
-
-            Nanikore *** wiykd akhf k kajfhl safh
-            ___
-            skjadlkjfweafs lasdkfewa
-
-
-            ***
-
-            Make sure to have a blank line either side to avoid ambiguity: 
-            <h1>this is a header</h1>
-            <h1>this is text followed by a horizontal line</h1>
-
-            Alternatively, you can use the <hr> HTML tag. 
         """.trimIndent()
 
-        val actual = plugin.processMarkdown(testCase)
-        assertEquals(testCaseExpected, actual)
+        val document = parser.parse(testCase)
+        val headings = mutableListOf<Heading>()
+        walkTree(document) { node ->
+            if (node is Heading) headings.add(node)
+        }
+
+        assertEquals(2, headings.size)
+        assertEquals(1, headings[0].level)
+        assertEquals(2, headings[1].level)
     }
 
-    @Test
-    fun `assure no matches can be found`() {
-        val testCase = """
-            <Center> <a>  **OP and ED of the day** </a>
-            <Center>  *Thanks for the nomination @neonwolf!!!*
-            ____
-            <Center>  **OP** 
-            youtube(https://youtu.be/_DIqplrohhg)
-            
-            **Harumodoki** by **Yanagi Nagi**
-            __
-            
-            **ED**
-            youtube(https://youtu.be/L3WiZx_XUOo)
-            
-            **Everyday World** 
-            ____
-            I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
-        """.trimIndent()
-
-        val actual = plugin.processMarkdown(testCase)
-        assertEquals(testCase, actual)
+    private fun walkTree(node: org.commonmark.node.Node, action: (org.commonmark.node.Node) -> Unit) {
+        action(node)
+        var child = node.firstChild
+        while (child != null) {
+            walkTree(child, action)
+            child = child.next
+        }
     }
 }

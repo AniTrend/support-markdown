@@ -1,49 +1,49 @@
 package co.anitrend.support.markdown.center
 
-import androidx.annotation.VisibleForTesting
-import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.link.LinkifyPlugin
+import android.text.Layout
+import android.text.style.AlignmentSpan
 import io.noties.markwon.AbstractMarkwonPlugin
-import java.lang.reflect.Modifier
+import io.noties.markwon.MarkwonVisitor
+import org.commonmark.parser.Parser
 
 /**
- * To center-align text, surround it with either __~~~...~~~__ or __+++...+++__
- * you can also use simple html center block __`<center>...</center>`__
+ * Markwon plugin for AniList's centered text syntax.
  *
- * @since 0.1.0
+ * Bridges legacy `~~~...~~~` syntax to `+++...+++` in [processMarkdown], then uses
+ * [PlusDelimiterProcessor] to parse `+++...+++` into [CenterNode] AST nodes.
+ * The visitor renders them with [AlignmentSpan.Standard] centered alignment.
+ *
+ * Note: `~~~` is consumed by commonmark-java's fenced-code block parser when it starts
+ * a line, so [processMarkdown] rewrites only inline paired occurrences to `+++`
+ * to avoid clobbering code fences.
  */
-class CenterPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
-
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex = Regex(
-        pattern = PATTERN_CENTER,
-        option = RegexOption.MULTILINE
-    )
-
-    private val linkifyPlugin = LinkifyPlugin.create()
+class CenterPlugin private constructor() : AbstractMarkwonPlugin() {
 
     override fun processMarkdown(markdown: String): String {
-        var replacement = markdown
-        val matches = regex.findAll(markdown)
-        matches.forEach { matchResult ->
-            val contentMatch = matchResult.groupValues.last()
-            val linked = linkifyPlugin.processMarkdown(contentMatch)
-            replacement = replacement.replace(
-                matchResult.value,
-                "<align center>$linked</align>"
+        return TILDE_CENTER_PATTERN.replace(markdown) { matchResult ->
+            "+++${matchResult.groupValues[1]}+++"
+        }
+    }
+
+    override fun configureParser(builder: Parser.Builder) {
+        builder.customDelimiterProcessor(PlusDelimiterProcessor())
+    }
+
+    override fun configureVisitor(builder: MarkwonVisitor.Builder) {
+        builder.on(CenterNode::class.java) { visitor, node ->
+            val start = visitor.length()
+            visitor.visitChildren(node)
+            visitor.builder().setSpan(
+                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                start,
+                visitor.length()
             )
         }
-        return replacement
     }
 
     companion object {
+        private val TILDE_CENTER_PATTERN = Regex("~~~([^\\n]+?)~~~")
 
-        @VisibleForTesting(otherwise = Modifier.PRIVATE)
-        const val PATTERN_CENTER = "(?:~{3}|\\+{3})([^\\\\]*?)(?:~{3}|\\+{3})"
-
-        fun create() =
-            CenterPlugin()
+        fun create() = CenterPlugin()
     }
 }

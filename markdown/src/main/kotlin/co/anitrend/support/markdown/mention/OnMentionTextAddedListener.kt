@@ -7,6 +7,13 @@ import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.core.CoreProps
 import org.commonmark.node.Link
 
+/**
+ * Listens for newly added text during Markwon's visitor walk and applies
+ * [Link] spans to `@username` mention patterns.
+ *
+ * The span covers `@username` (excluding the leading separator) by using
+ * [MentionTextAddedController.GROUP_MENTION] to compute the correct range.
+ */
 class OnMentionTextAddedListener private constructor(
     private val controller: MentionTextAddedController
 ): CorePlugin.OnTextAddedListener {
@@ -47,11 +54,13 @@ class OnMentionTextAddedListener private constructor(
         matches.forEach { matchResult ->
             val content = controller.getContent(matchResult)
             val url = controller.asUserUrl(content)
-            val matchRange = matchResult.range
+            val mentionRange = matchResult.groups[MentionTextAddedController.GROUP_MENTION]
+                ?.range
+                ?: return@forEach
             visitor.setLinkSpan(
                 url,
-                start + matchRange.first,
-                start + matchRange.last + 1
+                start + mentionRange.first - 1,
+                start + mentionRange.last + 1
             )
         }
     }

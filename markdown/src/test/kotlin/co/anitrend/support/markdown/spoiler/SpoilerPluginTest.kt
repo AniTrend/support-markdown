@@ -1,24 +1,21 @@
 package co.anitrend.support.markdown.spoiler
 
-import android.graphics.Color
-import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.common.IMarkdownPlugin
+import co.anitrend.support.markdown.common.TildeDelimiterProcessor
+import co.anitrend.support.markdown.spoiler.node.SpoilerNode
+import org.commonmark.parser.Parser
 import org.junit.Assert.*
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
- */
-class SpoilerPluginTest : ICoreRegexTest {
+class SpoilerPluginTest {
 
-    override val plugin by lazy {
-        SpoilerPlugin.create(Color.BLACK, Color.BLUE)
+    private val parser by lazy {
+        Parser.builder()
+            .customDelimiterProcessor(TildeDelimiterProcessor())
+            .build()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `spoiler elements are parsed into SpoilerNode`() {
         val testCase = """
             ~!youtube(ZVJ3Ho83Ksg)!~
 
@@ -27,11 +24,21 @@ class SpoilerPluginTest : ICoreRegexTest {
             ~!**Just enjoy &#x1f642;** !~
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
+        val document = parser.parse(testCase)
+        val spoilerNodes = mutableListOf<SpoilerNode>()
+        walkTree(document) { node ->
+            if (node is SpoilerNode) spoilerNodes.add(node)
+        }
 
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
+        assertEquals(2, spoilerNodes.size)
+    }
 
-        val actual = matchResultSet.count()
-        assertEquals(2, actual)
+    private fun walkTree(node: org.commonmark.node.Node, action: (org.commonmark.node.Node) -> Unit) {
+        action(node)
+        var child = node.firstChild
+        while (child != null) {
+            walkTree(child, action)
+            child = child.next
+        }
     }
 }

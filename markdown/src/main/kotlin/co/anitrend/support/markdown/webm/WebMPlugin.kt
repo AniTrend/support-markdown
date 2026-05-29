@@ -1,23 +1,16 @@
 package co.anitrend.support.markdown.webm
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 
 /**
- * Surround the URL with __webm(https://files.kiniro.uk/video/sonic.webm)__
+ * Handles AniList's `webm(URL)` custom syntax for video embeds.
  *
- * Note that, despite the name, _any_ audio or video file will work - but may not actually be supported by all browsers.
- *
- * PS: Does not interact well with code blocks.
- *
- * @since 0.1.0
+ * Converts the syntax to an `<a>` tag linking to the video with a poster thumbnail
+ * during [processMarkdown], relying on HtmlPlugin for rendering.
  */
-class WebMPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+class WebMPlugin private constructor() : AbstractMarkwonPlugin() {
 
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex = Regex(
+    private val regex = Regex(
         pattern = PATTERN_WEB_M,
         option = RegexOption.IGNORE_CASE
     )
@@ -41,7 +34,6 @@ class WebMPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin()
 
         private const val PATTERN_WEB_M = "(webm\\d*|\\d*px|\\d*%)\\((.+)\\)"
 
-        fun create() =
-            WebMPlugin()
+        fun create() = WebMPlugin()
     }
 }

@@ -1,48 +1,16 @@
 package co.anitrend.support.markdown.horizontal
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
-import co.anitrend.support.markdown.heading.HeadingPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 
 /**
- *  Enter three or more - or * characters, optionally with spaces:
+ * Placeholder plugin for horizontal rules — `---`, `***`, `___` thematic breaks
+ * are already handled by commonmark-java's native parser and Markwon's core rendering.
  *
- * `---`
- *
- *  `***`
- *
- *  `- - -`
- *
- *  `* * *`
- *
- * Make sure to have a blank line either side to avoid ambiguity:
- * ```
- * this is a header
- * ---
- * ```
- *
- * ```
- *  this is text followed by a horizontal line
- *  ---
- * ```
- *
- * Alternatively, you can use the <hr> HTML tag.
+ * Retained as a no-op wrapper for backward compatibility in the plugin chain.
  */
-class HorizontalLinePlugin private constructor() : IMarkdownPlugin, AbstractMarkwonPlugin() {
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex: Regex = Regex(PATTERN_HORIZONTAL_LINE, RegexOption.MULTILINE)
-
-    override fun processMarkdown(markdown: String): String {
-        return regex.replace(markdown, "<hr>")
-    }
+class HorizontalLinePlugin private constructor() : AbstractMarkwonPlugin() {
 
     companion object {
-        // TODO need to cater for these which include a space in between
-        //private const val PATTERN_HORIZONTAL_LINE = "^-{3,}[\\r\\n]+\$|^\\*{3,}[\\r\\n]+\$|^_{3,}[\\r\\n]+\$"
-        private const val PATTERN_HORIZONTAL_LINE = "^-{3,}[\\r\\n]+\$|^\\*{3,}[\\r\\n]+\$|^_{3,}\$"
-
         fun create() = HorizontalLinePlugin()
     }
 }

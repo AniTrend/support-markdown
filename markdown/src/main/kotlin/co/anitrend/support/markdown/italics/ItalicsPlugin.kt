@@ -1,47 +1,25 @@
 package co.anitrend.support.markdown.italics
 
-import co.anitrend.support.markdown.common.IMarkdownPlugin
+import android.text.style.StyleSpan
+import android.graphics.Typeface
 import io.noties.markwon.AbstractMarkwonPlugin
-import io.noties.markwon.editor.MarkwonEditorUtils
-
+import io.noties.markwon.MarkwonVisitor
+import org.commonmark.node.Emphasis
 
 /**
- * Italics plugin
+ * Renders commonmark-java [Emphasis] nodes (from `*text*` or `_text_`) as italic text.
+ *
+ * This replaces the old regex-based italic handling by hooking into the native
+ * commonmark-java `Emphasis` AST node and applying a [StyleSpan] with [Typeface.ITALIC].
  */
-class ItalicsPlugin private constructor(): IMarkdownPlugin, AbstractMarkwonPlugin() {
+class ItalicsPlugin private constructor() : AbstractMarkwonPlugin() {
 
-    /**
-     * Regular expression that should be used for the implementing classing
-     */
-    override val regex by lazy(LazyThreadSafetyMode.NONE) {
-        Regex("")
-    }
-
-    override fun processMarkdown(markdown: String): String {
-        val replacement = mutableListOf<String>()
-
-        markdown.split("\n").forEach {
-            var start = 0
-            var line = it
-
-            while (true) {
-                val match = MarkwonEditorUtils.findDelimited(line, start, "*") ?: break
-                if (match.end() - match.start() == 2) {
-                    start = match.end()
-                    continue
-                }
-
-                var temporary = line.substring(0, match.start())
-                temporary += "<i>${line.substring(match.start() + 1, match.end() - 1)}</i>"
-                temporary += line.substring(match.end())
-
-                line = temporary
-            }
-
-            replacement.add(line)
+    override fun configureVisitor(builder: MarkwonVisitor.Builder) {
+        builder.on(Emphasis::class.java) { visitor, node ->
+            val start = visitor.length()
+            visitor.visitChildren(node)
+            visitor.builder().setSpan(StyleSpan(Typeface.ITALIC), start, visitor.length())
         }
-
-        return replacement.joinToString("\n")
     }
 
     companion object {

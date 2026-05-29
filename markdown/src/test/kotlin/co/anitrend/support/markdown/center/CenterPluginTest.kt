@@ -1,44 +1,52 @@
 package co.anitrend.support.markdown.center
 
-import co.anitrend.support.markdown.ICoreRegexTest
+import co.anitrend.support.markdown.common.TildeDelimiterProcessor
+import org.commonmark.parser.Parser
 import org.junit.Assert.*
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
- */
-class CenterPluginTest : ICoreRegexTest {
+class CenterPluginTest {
 
-    override val plugin by lazy {
-        CenterPlugin.create()
+    private val parser by lazy {
+        Parser.builder()
+            .customDelimiterProcessor(TildeDelimiterProcessor())
+            .customDelimiterProcessor(PlusDelimiterProcessor())
+            .build()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
-
+    fun `triple tilde elements are parsed into CenterNode`() {
         val testCase = """
-            # ~~~__Creator of [AniTrend](https://anitrend.co), check it out :p__~~~
+            # +++__Creator of [AniTrend](https://anitrend.co), check it out :p__+++
 
-            ~~~<a href="https://discordapp.com/invite/2wzTqnF"><img src="https://img.shields.io/discord/314442908478472203.svg?color=%237289da&label=Join%20Anitrend!&logo=discord&logoColor=%23fff" alt="best anitrend"/>~~~
+            +++<a href="https://discordapp.com/invite/2wzTqnF"><img src="https://img.shields.io/discord/314442908478472203.svg?color=%237289da&label=Join%20Anitrend!&logo=discord&logoColor=%23fff" alt="best anitrend"/>+++
 
-            ~~~__I can make stuff with my mind, how cool is that?? :p!__~~~
-            ~~~img250(https://media.giphy.com/media/gZq7GstcdqVXi/giphy.gif)~~~
+            +++__I can make stuff with my mind, how cool is that?? :p!__+++
+            +++img250(https://media.giphy.com/media/gZq7GstcdqVXi/giphy.gif)+++
 
-            ~~~__[Kitsu](https://kitsu.io/users/wax911)__ | __[Instagram](https://www.instagram.com/nekosenpaic/)__ | __[GitHub](https://github.com/wax911)__~~~
+            +++__[Kitsu](https://kitsu.io/users/wax911)__ | __[Instagram](https://www.instagram.com/nekosenpaic/)__ | __[GitHub](https://github.com/wax911)__+++
 
-            ~~~__Can I Be Your Senpai Now??__~~~
-            ~~~img250(https://media.giphy.com/media/VnNdJolKFyg7e/giphy.gif)~~~
+            +++__Can I Be Your Senpai Now??__+++
+            +++img250(https://media.giphy.com/media/VnNdJolKFyg7e/giphy.gif)+++
 
-            ~~~<a href="https://www.patreon.com/bePatron?u=7968843" data-patreon-widget-type="become-patron-button">Support Me On Patron!</a>~~~
+            +++<a href="https://www.patreon.com/bePatron?u=7968843" data-patreon-widget-type="become-patron-button">Support Me On Patron!</a>+++
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
+        val document = parser.parse(testCase)
+        val centerNodes = mutableListOf<CenterNode>()
+        walkTree(document) { node ->
+            if (node is CenterNode) centerNodes.add(node)
+        }
 
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
+        assertEquals(8, centerNodes.size)
+    }
 
-        val actual = matchResultSet.count()
-        assertEquals(8, actual)
+    private fun walkTree(node: org.commonmark.node.Node, action: (org.commonmark.node.Node) -> Unit) {
+        action(node)
+        var child = node.firstChild
+        while (child != null) {
+            walkTree(child, action)
+            child = child.next
+        }
     }
 }

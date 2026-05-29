@@ -1,36 +1,35 @@
 package co.anitrend.support.markdown.core
 
-import android.util.Log
+import co.anitrend.support.markdown.common.TildeDelimiterProcessor
 import co.anitrend.support.markdown.html.AlignTagHandler
 import co.anitrend.support.markdown.html.CenterTagHandler
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.core.MarkwonTheme
-import io.noties.markwon.html.HtmlEmptyTagReplacement
 import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.html.HtmlTag
 import org.commonmark.node.SoftLineBreak
+import org.commonmark.parser.Parser
 
 /**
- * Provides basic plugin configuration
+ * Core plugin that wires together the shared markdown infrastructure.
  *
- * @since 0.1.0
+ * - Registers [TildeDelimiterProcessor] (shared `~` parser for spoiler/strikethrough/center)
+ * - Registers [AlignTagHandler] and [CenterTagHandler] on [HtmlPlugin] for HTML alignment tags
+ * - Handles [SoftLineBreak] with a newline in the rendered output
+ * - Disables heading break height in the theme
  */
 class CorePlugin private constructor(
     private val autoCloseTags: Boolean
 ): AbstractMarkwonPlugin() {
 
-    private val regex by lazy(LazyThreadSafetyMode.NONE) {
-        Regex(
-            "\\[(.*?)]\\((.*?)\\)",
-            option = RegexOption.IGNORE_CASE
-        )
-    }
-
     override fun configureTheme(builder: MarkwonTheme.Builder) {
         super.configureTheme(builder)
         builder.headingBreakHeight(0)
+    }
+
+    override fun configureParser(builder: Parser.Builder) {
+        builder.customDelimiterProcessor(TildeDelimiterProcessor())
     }
 
     override fun configureVisitor(builder: MarkwonVisitor.Builder) {
@@ -44,47 +43,13 @@ class CorePlugin private constructor(
             html.addHandler(AlignTagHandler())
             html.addHandler(CenterTagHandler())
             html.allowNonClosedTags(autoCloseTags)
-            html.emptyTagReplacement(
-                object : HtmlEmptyTagReplacement() {
-                    /**
-                     * @return replacement for supplied startTag or null if no replacement should occur (which will
-                     * lead to `Inline` tag have start &amp; end the same value, thus not applicable for applying a Span)
-                     */
-                    override fun replace(tag: HtmlTag): String? {
-                        Log.i("CorePlugin","Empty tag $tag")
-                        when {
-                            tag.isBlock -> {
-                                val block = tag.asBlock
-                                // edge case where a user may use multiple <center> tags without closing them
-                                if (block.parent()?.isBlock == true && block.parent()?.isClosed == false) {
-                                    val parent = block.parent()
-                                }
-                            }
-                        }
-                        return super.replace(tag)
-                    }
-                }
-            )
         }
-    }
-
-    override fun processMarkdown(markdown: String): String {
-        var replacement = markdown
-        val matches = regex.findAll(markdown)
-        matches.forEach { matchResult ->
-            val value = matchResult.value
-            val tag = matchResult.groupValues[1]
-            val src = matchResult.groupValues.last()
-
-            replacement = replacement.replace(
-                value,
-                """<a href="$src">${tag}</a>"""
-            )
-        }
-        return replacement
     }
 
     companion object {
+        /**
+         * @param autoCloseTags whether to allow non-closed HTML tags (default true)
+         */
         fun create(
             autoCloseTags: Boolean = true,
         ) = CorePlugin(autoCloseTags)

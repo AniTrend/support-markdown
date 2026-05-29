@@ -1,39 +1,24 @@
 package co.anitrend.support.markdown.italics
 
-import co.anitrend.support.markdown.ICoreRegexTest
-import co.anitrend.support.markdown.common.IMarkdownPlugin
+import org.commonmark.node.Emphasis
+import org.commonmark.node.Text
+import org.commonmark.parser.Parser
 import org.junit.Assert.*
 import org.junit.Test
 
-class ItalicsPluginTest : ICoreRegexTest {
-    override val plugin by lazy {
-        ItalicsPlugin.create()
+class ItalicsPluginTest {
+
+    private val parser by lazy {
+        Parser.builder().build()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `single asterisk emphasis is parsed as Emphasis node`() {
         val testCase = """
-            <Center> <a>  **OP and ED of the day** </a>
-            <Center>  *Thanks for the nomination @neonwolf!!!*
+            **OP and ED of the day**
+            *Thanks for the nomination @neonwolf!!!*
             ____
-            <Center>  **OP** 
-            youtube(https://youtu.be/_DIqplrohhg)
-            
-            **Harumodoki** by **Yanagi Nagi**
-            __
-            
-            **ED**
-            youtube(https://youtu.be/L3WiZx_XUOo)
-            
-            **Everyday World** 
-            ____
-            I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
-        """.trimIndent()
-        val testCaseExpected = """
-            <Center> <a>  **OP and ED of the day** </a>
-            <Center>  <i>Thanks for the nomination @neonwolf!!!</i>
-            ____
-            <Center>  **OP** 
+            **OP** 
             youtube(https://youtu.be/_DIqplrohhg)
             
             **Harumodoki** by **Yanagi Nagi**
@@ -47,7 +32,23 @@ class ItalicsPluginTest : ICoreRegexTest {
             I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
         """.trimIndent()
 
-        val actual = plugin.processMarkdown(testCase)
-        assertEquals(testCaseExpected, actual)
+        val document = parser.parse(testCase)
+        val emphasisNodes = mutableListOf<Emphasis>()
+        walkTree(document) { node ->
+            if (node is Emphasis) emphasisNodes.add(node)
+        }
+
+        assertEquals(1, emphasisNodes.size)
+        val text = (emphasisNodes[0].firstChild as? Text)?.literal
+        assertEquals("Thanks for the nomination @neonwolf!!!", text)
+    }
+
+    private fun walkTree(node: org.commonmark.node.Node, action: (org.commonmark.node.Node) -> Unit) {
+        action(node)
+        var child = node.firstChild
+        while (child != null) {
+            walkTree(child, action)
+            child = child.next
+        }
     }
 }
