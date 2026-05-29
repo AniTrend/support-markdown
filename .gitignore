@@ -243,3 +243,6 @@ app/schema.graphql
 *.exec
 # Added by code-review-graph
 .code-review-graph/
+
+# Worktrees
+.worktrees/
