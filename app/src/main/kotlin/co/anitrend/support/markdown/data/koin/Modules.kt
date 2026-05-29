@@ -3,8 +3,8 @@ package co.anitrend.support.markdown.data.koin
 import co.anitrend.support.markdown.data.repository.GetFeedTextPagedRepository
 import co.anitrend.support.markdown.data.usecase.TextFeedUseCase
 import co.anitrend.support.markdown.domain.interactor.GetTextFeedPaged
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.network.okHttpClient
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.network.okHttpClient
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
