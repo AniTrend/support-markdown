@@ -19,7 +19,6 @@ import com.diffplug.gradle.spotless.SpotlessExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jetbrains.kotlin.gradle.testing.internal.KotlinTestsRegistry
 import co.anitrend.support.markdown.buildSrc.plugin.components.PropertiesReader
 
@@ -62,9 +61,6 @@ internal fun Project.kotlinAndroidProjectExtension() =
 
 internal fun Project.kotlinTestsRegistry() =
     extensions.getByType<KotlinTestsRegistry>()
-
-internal fun Project.androidExtensionsExtension() =
-    extensions.getByType<AndroidExtensionsExtension>()
 
 internal fun Project.publishingExtension() =
     extensions.getByType<PublishingExtension>()
