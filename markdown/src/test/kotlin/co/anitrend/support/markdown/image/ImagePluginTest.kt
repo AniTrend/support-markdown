@@ -1,22 +1,16 @@
 package co.anitrend.support.markdown.image
 
-import co.anitrend.support.markdown.ICoreRegexTest
 import org.junit.Assert.*
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
- */
-class ImagePluginTest : ICoreRegexTest {
+class ImagePluginTest {
 
-    override val plugin by lazy {
+    private val plugin by lazy {
         ImagePlugin.create()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `processMarkdown converts img syntax to img tags`() {
         val testCase = """
             ~!
             img180(https://www.anime-planet.com/images/characters/henrietta-168.jpg) 
@@ -31,12 +25,9 @@ class ImagePluginTest : ICoreRegexTest {
             ImG20px(https://something.top.find)
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
-
-        val actual = matchResultSet.count()
-        assertEquals(7, actual)
+        val result = plugin.processMarkdown(testCase)
+        val imgCount = """<img """.toRegex().findAll(result).count()
+        assertEquals(7, imgCount)
     }
 
     @Test
@@ -46,11 +37,8 @@ class ImagePluginTest : ICoreRegexTest {
             5. Violet Evergarden
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0).toList()
-
-        val actual = matchResultSet.count()
-        assertEquals(4, actual)
+        val result = plugin.processMarkdown(testCase)
+        val imgCount = """<img """.toRegex().findAll(result).count()
+        assertEquals(4, imgCount)
     }
 }

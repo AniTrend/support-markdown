@@ -1,22 +1,16 @@
 package co.anitrend.support.markdown.youtube
 
-import co.anitrend.support.markdown.ICoreRegexTest
 import org.junit.Assert.*
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
- */
-class YoutubePluginTest : ICoreRegexTest {
+class YoutubePluginTest {
 
-    override val plugin by lazy {
+    private val plugin by lazy {
         YouTubePlugin.create()
     }
 
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `processMarkdown converts youtube syntax to linked thumbnails`() {
         val testCase = """
             youtube(HbVaFnx-uAw) 
             
@@ -29,12 +23,9 @@ class YoutubePluginTest : ICoreRegexTest {
             New Waifu??? __#t h i c c  t h i g h s__ =_=
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase, 0)
-
-        val actual = matchResultSet.count()
-        assertEquals(3, actual)
+        val result = plugin.processMarkdown(testCase)
+        val linkCount = """<a href="https://www\.youtube\.com/watch\?v=""".toRegex().findAll(result).count()
+        assertEquals(3, linkCount)
     }
 
     @Test

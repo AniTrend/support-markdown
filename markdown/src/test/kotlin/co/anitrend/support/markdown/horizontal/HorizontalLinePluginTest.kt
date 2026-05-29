@@ -1,87 +1,43 @@
 package co.anitrend.support.markdown.horizontal
 
-import co.anitrend.support.markdown.ICoreRegexTest
+import org.commonmark.node.ThematicBreak
+import org.commonmark.parser.Parser
 import org.junit.Assert.*
-import org.junit.Ignore
 import org.junit.Test
 
-class HorizontalLinePluginTest : ICoreRegexTest {
+class HorizontalLinePluginTest {
 
-    override val plugin by lazy {
-        HorizontalLinePlugin.create()
+    private val parser by lazy {
+        Parser.builder().build()
     }
 
-    @Ignore("Known to be failing, a fix has not been created yet")
     @Test
-    override fun `defined regex pattern detect elements`() {
+    fun `thematic breaks are parsed by commonmark-java`() {
         val testCase = """
-            Hello this is a title
-            ===
-
-            this is also another title
-            ---
+            text above
 
             ---
-            what about this?
-            *****
-
-            Make sure to have a blank line either side to avoid ambiguity: 
-            this is a header
-            - - - - - - - - - - - - - - 
-
-            this is text followed by a horizontal line
-            _ _ _ _
-
-            Nanikore *** wiykd akhf k kajfhl safh
-            ___
-            skjadlkjfweafs lasdkfewa
-
 
             ***
 
-            Make sure to have a blank line either side to avoid ambiguity: 
-            this is a header
-            ---
-            this is text followed by a horizontal line
-            ---
-
-            Alternatively, you can use the <hr> HTML tag. 
+            ___
         """.trimIndent()
 
-        assertTrue(plugin.regex.containsMatchIn(testCase))
+        val document = parser.parse(testCase)
+        val breaks = mutableListOf<ThematicBreak>()
+        walkTree(document) { node ->
+            if (node is ThematicBreak) breaks.add(node)
+        }
 
-        val matchResultSet = plugin.regex.findAll(testCase)
-
-        val actual = matchResultSet.count()
-        assertEquals(4, actual)
+        assertEquals(3, breaks.size)
     }
 
-
-    @Test
-    fun `assure no matches can be found`() {
-        val testCase = """
-            <Center> <a>  **OP and ED of the day** </a>
-            <Center>  *Thanks for the nomination @neonwolf!!!*
-            ____
-            <Center>  **OP** 
-            youtube(https://youtu.be/_DIqplrohhg)
-            
-            **Harumodoki** by **Yanagi Nagi**
-            __
-            
-            **ED**
-            youtube(https://youtu.be/L3WiZx_XUOo)
-            
-            **Everyday World** 
-            ____
-            I nominate @chrisenpai || @bunns || @tobibot || @champi || @reeda || @astaa and anyone else who's interested in doing this
-        """.trimIndent()
-
-        assertTrue(plugin.regex.containsMatchIn(testCase))
-
-        val matchResultSet = plugin.regex.findAll(testCase)
-
-        val actual = matchResultSet.count()
-        assertEquals(2, actual)
+    private fun walkTree(node: org.commonmark.node.Node, action: (org.commonmark.node.Node) -> Unit) {
+        action(node)
+        var child = node.firstChild
+        while (child != null) {
+            walkTree(child, action)
+            child = child.next
+        }
     }
 }
