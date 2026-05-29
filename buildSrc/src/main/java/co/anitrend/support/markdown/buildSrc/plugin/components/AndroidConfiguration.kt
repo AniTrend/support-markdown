@@ -11,7 +11,6 @@ import co.anitrend.support.markdown.buildSrc.plugin.extensions.kotlinAndroidProj
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.io.File
 
@@ -52,10 +51,10 @@ private fun DefaultConfig.applyAdditionalConfiguration(project: Project) {
 }
 
 internal fun Project.configureAndroid(): Unit = baseExtension().run {
-    compileSdkVersion(34)
+    compileSdkVersion(36)
     defaultConfig {
-        minSdk = 21
-        targetSdk = 34
+        minSdk = 23
+        targetSdk = 36
         versionCode = props[PropertyTypes.CODE].toInt()
         versionName = props[PropertyTypes.VERSION]
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -116,15 +115,10 @@ internal fun Project.configureAndroid(): Unit = baseExtension().run {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    tasks.withType(KotlinCompile::class.java) {
-        val compilerArgumentOptions = emptyList<String>()
-
-        kotlinOptions {
-            allWarningsAsErrors = false
-            kotlinOptions {
-                allWarningsAsErrors = false
-                freeCompilerArgs = compilerArgumentOptions
-            }
+    tasks.withType(KotlinJvmCompile::class.java).configureEach {
+        compilerOptions {
+            allWarningsAsErrors.set(false)
+            freeCompilerArgs.set(emptyList())
         }
     }
 
