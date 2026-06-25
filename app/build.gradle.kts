@@ -1,6 +1,6 @@
 plugins {
     id("co.anitrend.support.markdown")
-    id("com.apollographql.apollo").version("5.0.0")
+    id("com.apollographql.apollo").version("5.0.1")
 }
 
 android {
@@ -31,7 +31,7 @@ configurations {
 dependencies {
     implementation(project(":markdown"))
 
-    implementation("com.apollographql.apollo:apollo-runtime:5.0.0")
+    implementation("com.apollographql.apollo:apollo-runtime:5.0.1")
 
     implementation(libs.google.android.material)
 
